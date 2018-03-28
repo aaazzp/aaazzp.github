@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="title: markdown的基础语法markdown的标题markdown中的标题以#为标识符，#的数量多少代表的是标题的级数，如，一个 # 则表达一级标题 markdown中的换行markdown中是根据空行来划分不同的段落的，相邻的两行文字会被认为是同一段落，在编辑文本时，这段内容与上段内容是相邻的，所以没有换行 这段是空行换行 链接与图片链接与图片表示为: 链接:aaazzp 引入代码引">
+<meta name="description" content="实现activity只存在一个实例问题:在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。 解决办法一： 在清单文件中在相应的activity中加入（即调整其启动模式）： android:launchMode=&amp;quot;singleIn">
 <meta property="og:type" content="article">
 <meta property="og:title" content="aaaZzp&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/2018/03/27/markdow_base/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/03/28/实现activity只存在一个实例/index.html">
 <meta property="og:site_name" content="aaaZzp&#39;s Blog">
-<meta property="og:description" content="title: markdown的基础语法markdown的标题markdown中的标题以#为标识符，#的数量多少代表的是标题的级数，如，一个 # 则表达一级标题 markdown中的换行markdown中是根据空行来划分不同的段落的，相邻的两行文字会被认为是同一段落，在编辑文本时，这段内容与上段内容是相邻的，所以没有换行 这段是空行换行 链接与图片链接与图片表示为: 链接:aaazzp 引入代码引">
-<meta property="og:updated_time" content="2018-03-27T03:45:01.481Z">
+<meta property="og:description" content="实现activity只存在一个实例问题:在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。 解决办法一： 在清单文件中在相应的activity中加入（即调整其启动模式）： android:launchMode=&amp;quot;singleIn">
+<meta property="og:updated_time" content="2018-03-28T04:30:30.686Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="aaaZzp&#39;s Blog">
-<meta name="twitter:description" content="title: markdown的基础语法markdown的标题markdown中的标题以#为标识符，#的数量多少代表的是标题的级数，如，一个 # 则表达一级标题 markdown中的换行markdown中是根据空行来划分不同的段落的，相邻的两行文字会被认为是同一段落，在编辑文本时，这段内容与上段内容是相邻的，所以没有换行 这段是空行换行 链接与图片链接与图片表示为: 链接:aaazzp 引入代码引">
+<meta name="twitter:description" content="实现activity只存在一个实例问题:在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。 解决办法一： 在清单文件中在相应的activity中加入（即调整其启动模式）： android:launchMode=&amp;quot;singleIn">
 
 
 
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/27/markdow_base/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/28/实现activity只存在一个实例/"/>
 
 
 
@@ -231,7 +231,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/27/markdow_base/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/实现activity只存在一个实例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louisz">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-27T11:01:03+08:00">
-                2018-03-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-28T12:30:30+08:00">
+                2018-03-28
               </time>
             
 
@@ -298,16 +298,27 @@
       
 
       
-        <h1 id="title-markdown的基础语法"><a href="#title-markdown的基础语法" class="headerlink" title="title: markdown的基础语法"></a>title: markdown的基础语法</h1><h3 id="markdown的标题"><a href="#markdown的标题" class="headerlink" title="markdown的标题"></a>markdown的标题</h3><p>markdown中的标题以#为标识符，#的数量多少代表的是标题的级数，如，一个 # 则表达一级标题</p>
-<h3 id="markdown中的换行"><a href="#markdown中的换行" class="headerlink" title="markdown中的换行"></a>markdown中的换行</h3><p>markdown中是根据空行来划分不同的段落的，相邻的两行文字会被认为是同一段落<br>，在编辑文本时，这段内容与上段内容是相邻的，所以没有换行</p>
-<p>这段是空行换行</p>
-<h3 id="链接与图片"><a href="#链接与图片" class="headerlink" title="链接与图片"></a>链接与图片</h3><p>链接与图片表示为:</p>
-<p>链接:<a href="https:aaazzp.github.io" target="_blank" rel="noopener">aaazzp</a></p>
-<h3 id="引入代码"><a href="#引入代码" class="headerlink" title="引入代码"></a>引入代码</h3><p>引入代码，只需要另起新行，缩进四个空字符或一个制表符即可，如：<br>    <code>void print(){
-    }</code></p>
-<p>或(tab)：<br>    <code>void print(){
-        logic();...
-    }</code></p>
+        <h1 id="实现activity只存在一个实例"><a href="#实现activity只存在一个实例" class="headerlink" title="实现activity只存在一个实例"></a>实现activity只存在一个实例</h1><h4 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h4><p>在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。</p>
+<h4 id="解决办法一："><a href="#解决办法一：" class="headerlink" title="解决办法一："></a>解决办法一：</h4><p> 在清单文件中在相应的activity中加入（即调整其启动模式）：</p>
+<p><code>android:launchMode=&quot;singleInstance&quot;</code></p>
+<p>activity有以下四种启动模式：</p>
+<ol>
+<li><p>standard(默认): 标准模式，一调用startActivity()方法就会产生一个新的实例。</p>
+</li>
+<li><p>singleTop: 如果已经有一个实例位于Activity栈的顶部时，就不产生新的实例，而只是调用Activity中的newInstance()方法。如果不位于栈顶，会产生一个新的实例。</p>
+</li>
+<li><p>singleTask: 会在一个新的task中产生这个实例，以后每次调用都会使用这个，不会去产生新的实例了。在该模式下若利用intent传递数据，只在首次创建该activity下生效,若已存在该activity实例的情况下，利用intent传递数据会失效，须重写getNewIntent()方法在其中获取intent的数据</p>
+</li>
+<li><p>singleInstance: 这个跟singleTask基本上是一样，只有一个区别：在这个模式下的Activity实例所处的task中，只能有这个activity实例，不能有其他的实例。(个人觉得像单例模式)</p>
+</li>
+<li><p>(前两种模式都比较号理解，3，4之前的区别须再进一步了解，目前只大概了解其定义)</p>
+<h4 id="解决办法二："><a href="#解决办法二：" class="headerlink" title="解决办法二："></a>解决办法二：</h4><p>利用intent启动另一activity时，在intent中加标志<br>Intent.FLAG_ACTIVITY_REORDER_TO_FRONT这个标志表示：如果这个activity已经启动了，就不产生新的activity，而只是把这个activity实例加到栈顶来就可以了。</p>
+<p>如：</p>
+<p><code>Intent intent = new Intent(ReorderFour.this, ReorderTwo.class);    
+intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);    
+startActivity(intent);</code></p>
+</li>
+</ol>
 
       
     </div>
@@ -332,8 +343,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/21/how-to-bulid-hexo-blog/" rel="next" title="我的第一条博客">
-                <i class="fa fa-chevron-left"></i> 我的第一条博客
+              <a href="/2018/03/27/markdow_base/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
               </a>
             
           </div>
@@ -341,10 +352,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/28/实现activity只存在一个实例/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -458,7 +465,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#title-markdown的基础语法"><span class="nav-number">1.</span> <span class="nav-text">title: markdown的基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#markdown的标题"><span class="nav-number">1.0.1.</span> <span class="nav-text">markdown的标题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#markdown中的换行"><span class="nav-number">1.0.2.</span> <span class="nav-text">markdown中的换行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接与图片"><span class="nav-number">1.0.3.</span> <span class="nav-text">链接与图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引入代码"><span class="nav-number">1.0.4.</span> <span class="nav-text">引入代码</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现activity只存在一个实例"><span class="nav-number">1.</span> <span class="nav-text">实现activity只存在一个实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">问题:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法一："><span class="nav-number">1.0.0.2.</span> <span class="nav-text">解决办法一：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法二："><span class="nav-number">1.0.0.3.</span> <span class="nav-text">解决办法二：</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>

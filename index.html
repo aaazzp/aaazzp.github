@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -228,6 +228,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/实现activity只存在一个实例/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Louisz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="aaaZzp's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/28/实现activity只存在一个实例/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-28T12:30:30+08:00">
+                2018-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="实现activity只存在一个实例"><a href="#实现activity只存在一个实例" class="headerlink" title="实现activity只存在一个实例"></a>实现activity只存在一个实例</h1><h4 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h4><p>在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。</p>
+<h4 id="解决办法一："><a href="#解决办法一：" class="headerlink" title="解决办法一："></a>解决办法一：</h4><p> 在清单文件中在相应的activity中加入（即调整其启动模式）：</p>
+<p><code>android:launchMode=&quot;singleInstance&quot;</code></p>
+<p>activity有以下四种启动模式：</p>
+<ol>
+<li><p>standard(默认): 标准模式，一调用startActivity()方法就会产生一个新的实例。</p>
+</li>
+<li><p>singleTop: 如果已经有一个实例位于Activity栈的顶部时，就不产生新的实例，而只是调用Activity中的newInstance()方法。如果不位于栈顶，会产生一个新的实例。</p>
+</li>
+<li><p>singleTask: 会在一个新的task中产生这个实例，以后每次调用都会使用这个，不会去产生新的实例了。在该模式下若利用intent传递数据，只在首次创建该activity下生效,若已存在该activity实例的情况下，利用intent传递数据会失效，须重写getNewIntent()方法在其中获取intent的数据</p>
+</li>
+<li><p>singleInstance: 这个跟singleTask基本上是一样，只有一个区别：在这个模式下的Activity实例所处的task中，只能有这个activity实例，不能有其他的实例。(个人觉得像单例模式)</p>
+</li>
+<li><p>(前两种模式都比较号理解，3，4之前的区别须再进一步了解，目前只大概了解其定义)</p>
+<h4 id="解决办法二："><a href="#解决办法二：" class="headerlink" title="解决办法二："></a>解决办法二：</h4><p>利用intent启动另一activity时，在intent中加标志<br>Intent.FLAG_ACTIVITY_REORDER_TO_FRONT这个标志表示：如果这个activity已经启动了，就不产生新的activity，而只是把这个activity实例加到栈顶来就可以了。</p>
+<p>如：</p>
+<p><code>Intent intent = new Intent(ReorderFour.this, ReorderTwo.class);    
+intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);    
+startActivity(intent);</code></p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/27/markdow_base/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -247,7 +387,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/27/markdow_base/" itemprop="url">Unbenannt</a></h1>
+                <a class="post-title-link" href="/2018/03/27/markdow_base/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -257,7 +397,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-27T11:01:03+08:00">
                 2018-03-27
@@ -386,7 +526,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T10:56:49+08:00">
                 2018-03-21
@@ -517,8 +657,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -568,7 +708,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
