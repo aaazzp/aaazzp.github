@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -257,7 +257,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-28T12:30:30+08:00">
                 2018-03-28
@@ -299,7 +299,7 @@
       
         
           
-            <h1 id="实现activity只存在一个实例"><a href="#实现activity只存在一个实例" class="headerlink" title="实现activity只存在一个实例"></a>实现activity只存在一个实例</h1><h4 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h4><p>在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。</p>
+            <h4 id="问题"><a href="#问题" class="headerlink" title="问题:"></a>问题:</h4><p>在activity的跳转间，可能前一个activity没有finish()掉，从后一个跳回前一个，会导致前一个activty又产生了新的实例，多次操作后会存在多个相同activity的实例，导致退出需要退出多次。</p>
 <h4 id="解决办法一："><a href="#解决办法一：" class="headerlink" title="解决办法一："></a>解决办法一：</h4><p> 在清单文件中在相应的activity中加入（即调整其启动模式）：</p>
 <p><code>android:launchMode=&quot;singleInstance&quot;</code></p>
 <p>activity有以下四种启动模式：</p>
@@ -315,7 +315,7 @@
 <li><p>(前两种模式都比较号理解，3，4之前的区别须再进一步了解，目前只大概了解其定义)</p>
 <h4 id="解决办法二："><a href="#解决办法二：" class="headerlink" title="解决办法二："></a>解决办法二：</h4><p>利用intent启动另一activity时，在intent中加标志<br>Intent.FLAG_ACTIVITY_REORDER_TO_FRONT这个标志表示：如果这个activity已经启动了，就不产生新的activity，而只是把这个activity实例加到栈顶来就可以了。</p>
 <p>如：</p>
-<p><code>Intent intent = new Intent(ReorderFour.this, ReorderTwo.class);    
+<p><code>Intent intent = new Intent(ReorderFour.this,ReorderTwo.class);    
 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);    
 startActivity(intent);</code></p>
 </li>
@@ -387,7 +387,7 @@ startActivity(intent);</code></p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/27/markdow_base/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2018/03/27/markdow_base/" itemprop="url">Unbenannt</a></h1>
         
 
         <div class="post-meta">
@@ -397,7 +397,7 @@ startActivity(intent);</code></p>
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-27T11:01:03+08:00">
                 2018-03-27
@@ -526,7 +526,7 @@ startActivity(intent);</code></p>
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-21T10:56:49+08:00">
                 2018-03-21
@@ -658,7 +658,7 @@ startActivity(intent);</code></p>
                 <a href="/archives/">
               
                   <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -708,7 +708,7 @@ startActivity(intent);</code></p>
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
