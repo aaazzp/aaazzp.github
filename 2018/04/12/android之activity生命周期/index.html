@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){    /    在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿    一般只在这个方法中加载view即可。    该方法为瞬时的，很快就会进行onStart()     /} @Overridepublic void onStart(){    /*    进行到">
+<meta name="description" content="ndroid之Activity的生命周期Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*">
 <meta property="og:type" content="article">
 <meta property="og:title" content="aaaZzp&#39;s Blog">
 <meta property="og:url" content="http://yoursite.com/2018/04/12/android之activity生命周期/index.html">
 <meta property="og:site_name" content="aaaZzp&#39;s Blog">
-<meta property="og:description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){    /    在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿    一般只在这个方法中加载view即可。    该方法为瞬时的，很快就会进行onStart()     /} @Overridepublic void onStart(){    /*    进行到">
-<meta property="og:updated_time" content="2018-04-11T22:27:57.408Z">
+<meta property="og:description" content="ndroid之Activity的生命周期Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*">
+<meta property="og:updated_time" content="2018-04-11T22:36:42.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="aaaZzp&#39;s Blog">
-<meta name="twitter:description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){    /    在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿    一般只在这个方法中加载view即可。    该方法为瞬时的，很快就会进行onStart()     /} @Overridepublic void onStart(){    /*    进行到">
+<meta name="twitter:description" content="ndroid之Activity的生命周期Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*">
 
 
 
@@ -184,7 +184,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -194,7 +194,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -258,7 +258,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-12T06:26:54+08:00">
                 2018-04-12
@@ -298,28 +298,61 @@
       
 
       
-        <h1 id="Android之Activity的生命周期"><a href="#Android之Activity的生命周期" class="headerlink" title="Android之Activity的生命周期"></a>Android之Activity的生命周期</h1><p>`</p>
-<p>//按加载顺序<br>@Override<br>public void onCreate(){<br>    /<em><br>    在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿<br>    一般只在这个方法中加载view即可。<br>    该方法为瞬时的，很快就会进行onStart()
-    </em>/<br>}</p>
-<p>@Override<br>public void onStart(){<br>    /*<br>    进行到该方法时，界面为可见但不可交互。<br>    暂时不清楚在该方法下，应该进行那些操作<br>    个人理解为可以进行一些配置操作。<br>    该方法为瞬时的，很快就会进行onResume()</p>
-<pre><code>官方建议：onStop里面做了哪些清除的操作，就该在onStart里面重新把那些清除掉的资源重新创建出来
+        <hr>
+<h2 id="ndroid之Activity的生命周期"><a href="#ndroid之Activity的生命周期" class="headerlink" title="ndroid之Activity的生命周期"></a>ndroid之Activity的生命周期</h2><h1 id="Android之Activity的生命周期"><a href="#Android之Activity的生命周期" class="headerlink" title="Android之Activity的生命周期"></a>Android之Activity的生命周期</h1><p>`</p>
+<p>//按加载顺序<br>@Override<br>public void onCreate(){</p>
+<pre><code>/* 
+在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿
+一般只在这个方法中加载view即可。
+该方法为瞬时的，很快就会进行onStart()
 */
 </code></pre><p>}</p>
-<p>@Override<br>public void onResume(){<br>    /*<br>    进行到该方法时：页面为可见且可交互<br>    应该实现onResume()来初始化那些在onPause方法里面释放掉的组件，<br>    并执行那些activity每次进入Resumed state都需要的初始化动作 (例如开始动画与初始化那些只有在获取用户焦点时才需要的组件)</p>
-<pre><code>且在onPause()后重新进入该activity时，会重新运行一次该方法
+<p>@Override<br>public void onStart(){</p>
+<pre><code>/* 
+进行到该方法时，界面为可见但不可交互。
+暂时不清楚在该方法下，应该进行那些操作
+个人理解为可以进行一些配置操作。
+该方法为瞬时的，很快就会进行onResume()
+
+官方建议：onStop里面做了哪些清除的操作，就该在onStart里面重新把那些清除掉的资源重新创建出来
+*/
+</code></pre><p>}</p>
+<p>@Override<br>public void onResume(){</p>
+<pre><code>/* 
+进行到该方法时：页面为可见且可交互
+应该实现onResume()来初始化那些在onPause方法里面释放掉的组件，
+并执行那些activity每次进入Resumed state都需要的初始化动作 (例如开始动画与初始化那些只有在获取用户焦点时才需要的组件)
+
+且在onPause()后重新进入该activity时，会重新运行一次该方法
 所以可在该方法下，进行数据的加载，以便activty onPause()之后，用户
 重新进入当前activy导致无数据显示。
 */
 </code></pre><p>}</p>
-<p>@Override<br>public void onPause(){<br>    /<em><br>    当activity仍有部分可见时，就会运行到这个方法，如某一个半透明的activity以对话框的<br>    形式弹出时。<br>    在这个方法中应该释放一些资源，如暂停动画，暂停视频的播放之类的。<br>    若，是启动下一个activity时，在完成这个方法后，便会执行<br>    下一个activity的onCreate()方法，所以在这里不应该进行太耗时的操作<br>    避免造成切换过慢。
-    </em>/<br>}</p>
-<p>@Override<br>public void onStop(){<br>    /*<br>    当整个activity不可见时，便会调用该方法<br>    在这里应该释放那些不再需要的所有资源。<br>    系统会在需要内存空间时摧毁该activity的实例(和栈结构有关，通常back操作会导致前一个activity被销毁)<br>    在这里可以进行一些用户确定需要储存的数据操作。</p>
-<pre><code>官方建议：
+<p>@Override<br>public void onPause(){</p>
+<pre><code>/* 
+当activity仍有部分可见时，就会运行到这个方法，如某一个半透明的activity以对话框的
+形式弹出时。
+在这个方法中应该释放一些资源，如暂停动画，暂停视频的播放之类的。
+若，是启动下一个activity时，在完成这个方法后，便会执行
+下一个activity的onCreate()方法，所以在这里不应该进行太耗时的操作
+避免造成切换过慢。
+*/
+</code></pre><p>}</p>
+<p>@Override<br>public void onStop(){</p>
+<pre><code>/* 
+当整个activity不可见时，便会调用该方法
+在这里应该释放那些不再需要的所有资源。
+系统会在需要内存空间时摧毁该activity的实例(和栈结构有关，通常back操作会导致前一个activity被销毁)
+在这里可以进行一些用户确定需要储存的数据操作。
+官方建议：
 onStop里面做了哪些清除的操作，就该在onStart里面重新把那些清除掉的资源重新创建出来
 */
 </code></pre><p>}</p>
-<p>@Override<br>public void onRestart(){<br>    /<em><br>    当运行至onStop()后，用户重新进入当前activity时，便会调用该方法。
-    </em>/<br>}</p>
+<p>@Override<br>public void onRestart(){</p>
+<pre><code>/* 
+当运行至onStop()后，用户重新进入当前activity时，便会调用该方法。
+*/
+</code></pre><p>}</p>
 <p>@Override<br>public void onDestroy(){</p>
 <pre><code>/* 
 当系统销毁该activity时便会执行当前方法
@@ -418,10 +451,10 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
+            Inhaltsverzeichnis
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
+            Übersicht
           </li>
         </ul>
       
@@ -442,7 +475,7 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
                 <a href="/archives/">
               
                   <span class="site-state-item-count">4</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -478,7 +511,7 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android之Activity的生命周期"><span class="nav-number">1.</span> <span class="nav-text">Android之Activity的生命周期</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ndroid之Activity的生命周期"><span class="nav-number">1.</span> <span class="nav-text">ndroid之Activity的生命周期</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android之Activity的生命周期"><span class="nav-number"></span> <span class="nav-text">Android之Activity的生命周期</span></a></div>
             
 
           </div>
@@ -508,7 +541,7 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
