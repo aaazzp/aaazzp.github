@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*  进行到该方法时，界面为可见但不可交互。">
+<meta name="description" content="​    Intent intent = new Intent();       intent.setClass(content,Target.class);  ​    intent.putExtra(key,value);       context.startActivity(intent);    ​    Uri uri = Uri.parse(&amp;quot;www.baidu.com&amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android之Activity的生命周期">
-<meta property="og:url" content="http://yoursite.com/2018/04/12/android之activity生命周期/index.html">
+<meta property="og:title" content="Android之Intent的使用">
+<meta property="og:url" content="http://yoursite.com/2018/04/12/Android的Intent的使用/index.html">
 <meta property="og:site_name" content="aaaZzp&#39;s Blog">
-<meta property="og:description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*  进行到该方法时，界面为可见但不可交互。">
-<meta property="og:updated_time" content="2018-04-11T22:43:40.510Z">
+<meta property="og:description" content="​    Intent intent = new Intent();       intent.setClass(content,Target.class);  ​    intent.putExtra(key,value);       context.startActivity(intent);    ​    Uri uri = Uri.parse(&amp;quot;www.baidu.com&amp;">
+<meta property="og:updated_time" content="2018-04-11T23:09:19.444Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android之Activity的生命周期">
-<meta name="twitter:description" content="Android之Activity的生命周期` //按加载顺序@Overridepublic void onCreate(){ /*  在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿 一般只在这个方法中加载view即可。 该方法为瞬时的，很快就会进行onStart() */ } @Overridepublic void onStart(){ /*  进行到该方法时，界面为可见但不可交互。">
+<meta name="twitter:title" content="Android之Intent的使用">
+<meta name="twitter:description" content="​    Intent intent = new Intent();       intent.setClass(content,Target.class);  ​    intent.putExtra(key,value);       context.startActivity(intent);    ​    Uri uri = Uri.parse(&amp;quot;www.baidu.com&amp;">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/12/android之activity生命周期/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/04/12/Android的Intent的使用/"/>
 
 
 
 
 
-  <title>Android之Activity的生命周期 | aaaZzp's Blog</title>
+  <title>Android之Intent的使用 | aaaZzp's Blog</title>
   
 
 
@@ -231,7 +231,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/12/android之activity生命周期/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/12/Android的Intent的使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Louisz">
@@ -248,7 +248,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android之Activity的生命周期</h1>
+          <h1 class="post-title" itemprop="name headline">Android之Intent的使用</h1>
         
 
         <div class="post-meta">
@@ -260,7 +260,7 @@
               
                 <span class="post-meta-item-text">Diposting di</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-12T06:26:54+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-12T07:08:27+08:00">
                 2018-04-12
               </time>
             
@@ -298,72 +298,74 @@
       
 
       
-        <h1 id="Android之Activity的生命周期"><a href="#Android之Activity的生命周期" class="headerlink" title="Android之Activity的生命周期"></a>Android之Activity的生命周期</h1><p>`</p>
-<p>//按加载顺序<br>@Override<br>public void onCreate(){</p>
-<pre><code>/* 
-在这个方法中不适宜进行太耗时的操作，避免造成加载页面卡顿
-一般只在这个方法中加载view即可。
-该方法为瞬时的，很快就会进行onStart()
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onStart(){</p>
-<pre><code>/* 
-进行到该方法时，界面为可见但不可交互。
-暂时不清楚在该方法下，应该进行那些操作
-个人理解为可以进行一些配置操作。
-该方法为瞬时的，很快就会进行onResume()
-
-官方建议：onStop里面做了哪些清除的操作，就该在onStart里面重新把那些清除掉的资源重新创建出来
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onResume(){</p>
-<pre><code>/* 
-进行到该方法时：页面为可见且可交互
-应该实现onResume()来初始化那些在onPause方法里面释放掉的组件，
-并执行那些activity每次进入Resumed state都需要的初始化动作 (例如开始动画与初始化那些只有在获取用户焦点时才需要的组件)
-
-且在onPause()后重新进入该activity时，会重新运行一次该方法
-所以可在该方法下，进行数据的加载，以便activty onPause()之后，用户
-重新进入当前activy导致无数据显示。
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onPause(){</p>
-<pre><code>/* 
-当activity仍有部分可见时，就会运行到这个方法，如某一个半透明的activity以对话框的
-形式弹出时。
-在这个方法中应该释放一些资源，如暂停动画，暂停视频的播放之类的。
-若，是启动下一个activity时，在完成这个方法后，便会执行
-下一个activity的onCreate()方法，所以在这里不应该进行太耗时的操作
-避免造成切换过慢。
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onStop(){</p>
-<pre><code>/* 
-当整个activity不可见时，便会调用该方法
-在这里应该释放那些不再需要的所有资源。
-系统会在需要内存空间时摧毁该activity的实例(和栈结构有关，通常back操作会导致前一个activity被销毁)
-在这里可以进行一些用户确定需要储存的数据操作。
-官方建议：
-onStop里面做了哪些清除的操作，就该在onStart里面重新把那些清除掉的资源重新创建出来
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onRestart(){</p>
-<pre><code>/* 
-当运行至onStop()后，用户重新进入当前activity时，便会调用该方法。
-*/
-</code></pre><p>}</p>
-<p>@Override<br>public void onDestroy(){</p>
-<pre><code>/* 
-当系统销毁该activity时便会执行当前方法
-在这里需要去清除那些可能导致内存泄漏的地方
-需要确保那些线程都被destroyed并且所有的操作都被停止
-*/
-</code></pre><p>}</p>
-<p>/*<br>注意：当该activity因为系统资源紧张而导致被销毁的时候，<br>    系统会在用户回到这个Activity时有这个Activity存在过的记录，<br>    系统会使用那些保存的记录数据（描述了当Activity被Destory时的状态）来重新创建一个新的Activity实例</p>
-<pre><code>一般调用onSaveInstanceState()保存在Bundle中（为了使Android系统能够恢复Activity中的View的状态，每个View都必须有一个唯一ID）。
-
-然后调用onRestoreInstanceState()回复数据。
-</code></pre><p> */`</p>
+        <!--显式Intent：activity间的跳转-->
+<p>​    <code>Intent intent = new Intent();
+      intent.setClass(content,Target.class);</code></p>
+<!--传递消息-->
+<p>​    <code>intent.putExtra(key,value);
+      context.startActivity(intent);</code></p>
+<!--隐式Intent(当想要唤起不同的app来执行某个动作（比如查看地图）时使用)-->
+<!--如查看网页-->
+<!--构建Uri-->
+<p>​    <code>Uri uri = Uri.parse(&quot;www.baidu.com&quot;);
+      Intent intent = new Intent(Intent.ACTION_VIEW,uri);</code></p>
+<!--当需要传递消息时-->
+<p>​    <code>intent.putExtra(key,value);
+      startActivity(intent);</code></p>
+<!--有时候，希望用户自主选择接收的app（如分享功能），则可以这样构建Intent-->
+<p>​    <code>String title = &quot;...&quot;;
+      Intent intent = new Intent(Intent.ACTION_SEND);
+      Intent intentChoose = Intent.createChooser(intent,title);
+      startActivity(intentChoose);</code></p>
+<!--当需要唤起第三方app来执行某个动作时，需要验证是否有app接受，若无，则app会crash,如下-->
+<p>​    <code>PackageManager packageManager = getPackageManager();
+      List&lt;ResolveInfo&gt; activities = packageManager.queryIntentActivities(intent, 0);</code></p>
+<!--true则有，false则无-->
+<p>​    <code>boolean isIntentSafe = activities.size() &gt; 0;</code></p>
+<!--  接收activity返回的结果:
+启动另外一个activity并不一定是单向的。我们也可以启动另外一个activity然后接受一个返回的result。为接受result，我们需要使用startActivityForResult() ，而不是startActivity()  -->
+<!--接收result的activity需重写onActivityResult()-->
+<!--requestCode:请求码,resultCode:成功则为RESULT_OK,data:返回的数据 -->
+<p>`protected void onActivityResult(int requestCode, int resultCode, Intent data) {</p>
+<p>​    // Check which request we’re responding to    </p>
+<p>​    if (requestCode == PICK_CONTACT_REQUEST) {    </p>
+<p>​    // Make sure the request was successful        </p>
+<p>​        if (resultCode == RESULT_OK) {</p>
+<p>​            }}</p>
+<p>​    }`</p>
+<!-- Intent过滤:
+通过在manifest文件中的<activity>标签下添加<intent-filter>的属性,使其他app能够启动我们的activity -->
+<!-- 添加Intent-filter,intent-filter需包含:
+        Action:一个想要执行的动作的名称。通常是系统已经定义好的值，
+            如ACTION_SEND或ACTION_VIEW。 在intent filter中通过<action>指定它的值，值的类型必须为字符串
+        Data:Intent附带数据的描述。在intent filter中通过<data>指定它的值，
+            可以使用一个或者多个属性，我们可以只定义MIME type或者是只指定URI prefix，也可以只定义一个URI scheme，或者是他们综合使用。
+            (注：如果不想handle Uri 类型的数据，那么应该指定 android:mimeType 属性。例如 text/plain or image/jpeg.)
+        Category:提供一个附加的方法来标识这个activity能够handle的intent。
+        通常与用户的手势或者是启动位置有关。系统有支持几种不同的categories,但是大多数都很少用到。
+        而且，所有的implicit intents都默认是 CATEGORY_DEFAULT 类型的。在intent filter中用<category>指定它的值。-->
+<!--如以下activity中的声明，当数据类型为文本或图像时会处理ACTION_SEND的intent-->
+<p><code>&lt;activity android:name=&quot;ShareActivity&quot;&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name=&quot;android.intent.action.SEND&quot;/&gt;
+        &lt;category android:name=&quot;android.intent.category.DEFAULT&quot;/&gt;
+        &lt;data android:mimeType=&quot;text/plain&quot;/&gt;
+        &lt;data android:mimeType=&quot;image/*&quot;/&gt;
+    &lt;/intent-filter&gt;
+    &lt;/activity&gt;</code></p>
+<!--在activity中处理Intent (最好是在onCreate()或者onStart()里面去执行)-->
+<p>​    `Intent intent = getIntent();<br>    Uri daa = intent.getData();</p>
+<p>​    if (intent.getType().indexOf(“image/“) != -1) {</p>
+<p>​    } else if (intent.getType().equals(“text/plain”)) {</p>
+<p>​    }</p>
+<p> `</p>
+<!--返回result-->
+<!--如果想返回一个result给启动的那个activity，仅仅需要执行setResult()，通过指定一个result code与result intent-->
+<!--构建返回的数据-->
+<p>​    <code>Intent result = new Intent(&quot;com.example.RESULT_ACTION&quot;, Uri.parse(&quot;content://result_uri&quot;);
+    setResult(Activity.RESULT_OK, result);</code></p>
+<!--关闭当前被唤醒的activity-->
+<p><code>finish()</code></p>
 
       
     </div>
@@ -388,8 +390,8 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/28/实现activity只存在一个实例/" rel="next" title="实现activity只存在一个实例">
-                <i class="fa fa-chevron-left"></i> 实现activity只存在一个实例
+              <a href="/2018/04/12/android之activity生命周期/" rel="next" title="Android之Activity的生命周期">
+                <i class="fa fa-chevron-left"></i> Android之Activity的生命周期
               </a>
             
           </div>
@@ -397,10 +399,6 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/12/Android的Intent的使用/" rel="prev" title="Android之Intent的使用">
-                Android之Intent的使用 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -452,17 +450,8 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Daftar Isi
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Ikhtisar
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -504,22 +493,6 @@ onStop里面做了哪些清除的操作，就该在onStart里面重新把那些�
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Android之Activity的生命周期"><span class="nav-number">1.</span> <span class="nav-text">Android之Activity的生命周期</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
