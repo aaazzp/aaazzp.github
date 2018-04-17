@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="程序设计的六大原则单一职责原则（只有一个功能）​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。 优点：消除耦合，减小因需求变化引起代码僵化。 （个人认为）缺点：造成编写过多的类。 （个人认为）如编写的各种工具类，实现的是某一方面的单一功能。 里氏替换">
+<meta property="og:type" content="article">
+<meta property="og:title" content="aaaZzp&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/04/17/程序设计的六大原则/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="程序设计的六大原则单一职责原则（只有一个功能）​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。 优点：消除耦合，减小因需求变化引起代码僵化。 （个人认为）缺点：造成编写过多的类。 （个人认为）如编写的各种工具类，实现的是某一方面的单一功能。 里氏替换">
+<meta property="og:updated_time" content="2018-04-17T14:27:39.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="aaaZzp&#39;s Blog">
+<meta name="twitter:description" content="程序设计的六大原则单一职责原则（只有一个功能）​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。 优点：消除耦合，减小因需求变化引起代码僵化。 （个人认为）缺点：造成编写过多的类。 （个人认为）如编写的各种工具类，实现的是某一方面的单一功能。 里氏替换">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-程序设计的六大原则" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/17/程序设计的六大原则/" class="article-date">
+  	<time datetime="2018-04-17T14:27:39.836Z" itemprop="datePublished">2018-04-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="程序设计的六大原则"><a href="#程序设计的六大原则" class="headerlink" title="程序设计的六大原则"></a>程序设计的六大原则</h2><h4 id="单一职责原则（只有一个功能）"><a href="#单一职责原则（只有一个功能）" class="headerlink" title="单一职责原则（只有一个功能）"></a>单一职责原则（只有一个功能）</h4><p>​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。<br>    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。</p>
+<p>优点：消除耦合，减小因需求变化引起代码僵化。</p>
+<p>（个人认为）缺点：造成编写过多的类。</p>
+<p>（个人认为）如编写的各种工具类，实现的是某一方面的单一功能。</p>
+<h4 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h4><p>​    子类必须能够替换它们的父类（基类型）。如果一个软件实体使用的是基类，那么当把这个基类<br>替换为其子类，程序的行为不会发生任何变化。<br>    优点：很容易的实现同一父类下各个子类的互换，而客户端可以毫不察觉（即不会造成其他的影响）。（个人认为）如：android中继承与ViewGroup的子类（LinearLayout,RelativeLayout),均可作为控件的容器。</p>
+<h4 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h4><p>​    实现依赖于抽象，而不依赖于具体；抽象不应当依赖于细节；细节应当依赖于抽象；针对接口编程，不针对实现编程。<br>    （个人认为）总的来说，是先把程序需要完成的功能，利用接口抽象统一规范，具体实现时根据接口的规范去编程，以及实现细节。<br>    优点：依赖倒置原则使细节和策略都依赖于抽象，抽象的稳定性决定了系统的稳定性<br>    缺点：在抽象层次上的耦合虽然有灵活性，但也带来了额外的复杂性，<br>        如果一个具体类发生变化的可能性非常小（个人认为：问题是，该如何判断某一个类变化的可能性？因为项目中有太多的变化），那么抽象耦合能发挥的好处便十分有限（个人认为，因为变化小的具体类，直接具体编写完整的实现会更为清晰），这时可以用具体耦合反而会更好。<br>    层次化：所有结构良好的面向对象构架都具有清晰的层次定义，每个层次通过一个定义良好的、受控的接口向外提供一组内聚的服务。<br>    依赖于抽象：建议不依赖于具体类，即程序中所有的依赖关系都应该终止于抽象类或者接口。尽量做到：<br>            1.任何变量都不该持有一个指向具体类的指针或引用（避免变化时，需逐一修改）；<br>            2.任何类都不该从具体类派生（因为java中类为单继承）<br>            3.任何方法都不应该复写它的任何基类中已经实现的方法（不然会造成重复代码）。</p>
+<h4 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h4><p>​    使用多个专一功能的接口比使用一个的总接口总要好（因为某些实现类可能只需要部分功能，但实现总接口时却必须重写全部的功能）。<br>    优点：会使一个软件系统功能扩展时，修改的压力不会传到别的对象那里<br>        1、利用委托分离接口。<br>        2、利用多继承分离接口。</p>
+<h4 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h4><p>​    对象与对象之间应该使用尽可能少的方法来关联，避免千丝万缕的关系（不然会导致程序的高耦合）控制信息的过载，在将其运用到系统设计中应注意以下几点：<br>    1.在类的划分上，应当创建有弱耦合的类。类之间的耦合越弱，就越有利于复用；<br>    2.在类的结构设计上，每一个类都应当尽量降低成员的访问权限。一个类不应当public自己的属性，而应当提供取值和赋值的方法让外界间接访问自己的属性。<br>    3.在类的设计上，只要有可能，一个类应当设计成不变类。（安全）</p>
+<p>​    4.在对其它对象的引用上，一个类对其它对象的引用应该降到最低（不太懂这是什么意思，待了解）</p>
+<h4 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h4><p>​    对扩展开放，对修改关闭。<br>    优点：按照OCP原则设计出来的系统，降低了程序各部分之间的耦合性，其适应性、灵活性、稳定性都比较好。当已有软件系统需要增加新的功能时，不需要对作为系统基础的抽象层进行修改，只需要在原有基础上附加新的模块就能实现所需要添加的功能。增加的新模块对原有的模块完全没有影响或影响很小，这样就无须为原有模块进行重新测试。<br>    实现规则：在面向对象设计中，不允许更改的是系统的抽象层，而允许扩展的是系统的实现层。定义一个一劳永逸的抽象设计层，允许尽可能多的行为在实现层被实现。解决问题关键在于抽象化，抽象化是面向对象设计的第一个核心本质。<br>    在面向对象编程中，通过抽象类及接口，规定了具体类的特征作为抽象层，相对稳定，不需更改，从而满足“对修改关闭”；而从抽象类导出的具体类可以改变系统的行为，从而满足“对扩展开放”。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/17/String、StringBuilder与StringBuffer的区别/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/17/算法分析与记录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="程序设计的六大原则" data-title="" data-url="http://yoursite.com/2018/04/17/程序设计的六大原则/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
