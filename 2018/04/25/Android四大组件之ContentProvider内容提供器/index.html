@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android四大组件之ContentProvider内容提供器 | aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ContentProvider​    ContentProvider主要用于在不同的app之间实现数据共享的功能，允许一个app访问另一个app中的数据，同时保证被访数据的安全；它是实现跨程序共享数据的标准方式。 创建步骤​    继承ContentProvider类，实现其抽象方法，如： 12345678910111213141516171819202122232425262728293031">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android四大组件之ContentProvider内容提供器">
+<meta property="og:url" content="http://yoursite.com/2018/04/25/Android四大组件之ContentProvider内容提供器/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="ContentProvider​    ContentProvider主要用于在不同的app之间实现数据共享的功能，允许一个app访问另一个app中的数据，同时保证被访数据的安全；它是实现跨程序共享数据的标准方式。 创建步骤​    继承ContentProvider类，实现其抽象方法，如： 12345678910111213141516171819202122232425262728293031">
+<meta property="og:updated_time" content="2018-04-25T14:14:20.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android四大组件之ContentProvider内容提供器">
+<meta name="twitter:description" content="ContentProvider​    ContentProvider主要用于在不同的app之间实现数据共享的功能，允许一个app访问另一个app中的数据，同时保证被访数据的安全；它是实现跨程序共享数据的标准方式。 创建步骤​    继承ContentProvider类，实现其抽象方法，如： 12345678910111213141516171819202122232425262728293031">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Android四大组件之ContentProvider内容提供器" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/25/Android四大组件之ContentProvider内容提供器/" class="article-date">
+  	<time datetime="2018-04-25T14:14:40.628Z" itemprop="datePublished">2018-04-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android四大组件之ContentProvider内容提供器
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h3><p>​    ContentProvider主要用于在不同的app之间实现数据共享的功能，允许一个app访问另一个app中的数据，同时保证被访数据的安全；它是实现跨程序共享数据的标准方式。</p>
+<h3 id="创建步骤"><a href="#创建步骤" class="headerlink" title="创建步骤"></a>创建步骤</h3><p>​    继承ContentProvider类，实现其抽象方法，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyProvider</span> <span class="keyword">extends</span> <span class="title">ContentProvider</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">OnCreate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        初始化内容提供器时调用，一般在这里完成数据库的创建与升级等操作</span></span><br><span class="line"><span class="comment">        （只在有调用ContentResolver尝试访问app中的数据时，才会被初始化）</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//返回true代表初始化成功，false则为失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Cursor <span class="title">query</span><span class="params">(Uri uri,String[] projection,String selection,</span></span></span><br><span class="line"><span class="function"><span class="params">                        String[] selectionArgs,String sortOrder)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        调用该方法从内容提供器中查询数据，uri参数用作确定查询的表</span></span><br><span class="line"><span class="comment">        projection参数用于确定查询的列，selection,selectionArgs是查询的条件</span></span><br><span class="line"><span class="comment">        sortOrder是对结果进行排序</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        查询结果存放在Cursor对象中返回</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Uri <span class="title">insert</span><span class="params">(Uri uri,ContentValues values)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        想内容提供器中插入一条数据</span></span><br><span class="line"><span class="comment">        uri:确定插入的表</span></span><br><span class="line"><span class="comment">        values：插入的数据</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        添加成功后会返回表示该条新数据的uri</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">update</span><span class="params">(Uri uri,ContentValues values,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        更新数据时调用该方法</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        values:新的数据</span></span><br><span class="line"><span class="comment">        selection、selectionArgs:更新的条件</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回更新了的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delete</span><span class="params">(Uri uri,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        删除数据时调用</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        selection、selectionArgs：同理</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回被删除的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">(Uri uri)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        调用该方法，是根据传入的uri返回相应的MIME类型</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    其中Uri是各个方法中必须的参数，标准的内容URI的写法为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">content://com.example.app.provider/table/id</span><br><span class="line">表示的是调用com.example.app应用中table表的数据，id为查询表中 id为此值的数据(不传入此值，则代表查询全表)</span><br><span class="line"></span><br><span class="line">若想查询匹配任意表的内容，则可将table改为 *，如：</span><br><span class="line">content://com.example.app.prodiver/*</span><br><span class="line"></span><br><span class="line">若想查询具体表中的某一行,即可将id替换为#，如：</span><br><span class="line">content://com.eaxmple.app.provider/table/#</span><br></pre></td></tr></table></figure>
+<p>​    然后，调用UriMatcher类实现匹配内容URI，调用addURI()方法，则MyProvider可修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyProvider</span> <span class="keyword">extends</span> <span class="title">ContentProvider</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_DIR = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_ITEM = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE2_DIR = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_ITEM = <span class="number">3</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> UriMatcher uriMatcher;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        uriMatcher = <span class="keyword">new</span> UriMatcher(Uri.Matcher.NO_MATCH);</span><br><span class="line">        <span class="comment">//第一个参数为authority(一般为应用包名.provider)</span></span><br><span class="line">        <span class="comment">//第二个参数为path，即查询的表</span></span><br><span class="line">        <span class="comment">//第三个参数为自定义码</span></span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table1"</span>,TABLE1_DIR);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table1/#"</span>,TABLE1_ITEM);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table2"</span>,TABLE2_DIR);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table2/#"</span>,TABLE2_ITEM);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">OnCreate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        初始化内容提供器时调用，一般在这里完成数据库的创建与升级等操作</span></span><br><span class="line"><span class="comment">        （只在有调用ContentResolver尝试访问app中的数据时，才会被初始化）</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//返回true代表初始化成功，false则为失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Cursor <span class="title">query</span><span class="params">(Uri uri,String[] projection,String selection,</span></span></span><br><span class="line"><span class="function"><span class="params">                        String[] selectionArgs,String sortOrder)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        调用该方法从内容提供器中查询数据，uri参数用作确定查询的表</span></span><br><span class="line"><span class="comment">        projection参数用于确定查询的列，selection,selectionArgs是查询的条件</span></span><br><span class="line"><span class="comment">        sortOrder是对结果进行排序</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        查询结果存放在Cursor对象中返回</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="comment">//其他方法中也类似，调用uriMatcher匹配查询的位置</span></span><br><span class="line">        <span class="keyword">switch</span>(uriMatcher.match(uri))&#123;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_DIR:</span><br><span class="line">                <span class="comment">//查询该表的全部数据</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//查询该表下的某条数据</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE2_DIR:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Uri <span class="title">insert</span><span class="params">(Uri uri,ContentValues values)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        想内容提供器中插入一条数据</span></span><br><span class="line"><span class="comment">        uri:确定插入的表</span></span><br><span class="line"><span class="comment">        values：插入的数据</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        添加成功后会返回表示该条新数据的uri</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">update</span><span class="params">(Uri uri,ContentValues values,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        更新数据时调用该方法</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        values:新的数据</span></span><br><span class="line"><span class="comment">        selection、selectionArgs:更新的条件</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回更新了的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delete</span><span class="params">(Uri uri,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        删除数据时调用</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        selection、selectionArgs：同理</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回被删除的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">(Uri uri)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        调用该方法，是根据传入的uri返回相应的MIME类型</span></span><br><span class="line"><span class="comment">        MIME字符串主要由3部分组成:</span></span><br><span class="line"><span class="comment">        1.vnd开头</span></span><br><span class="line"><span class="comment">        2.如果URI以路径结尾，则后接android.cursor.dir/，</span></span><br><span class="line"><span class="comment">        若以id结尾，则接android.cursor.item/</span></span><br><span class="line"><span class="comment">        3.最后街上vnd.&lt;authority&gt;.&lt;path&gt;</span></span><br><span class="line"><span class="comment">        如下：</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">switch</span>(uriMatcher.match(uri))&#123;</span><br><span class="line">              <span class="keyword">case</span> TABLE1_DIR:</span><br><span class="line">                <span class="comment">//以路径结尾</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.dir/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//以id结尾</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.item/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE2_DIR:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.dir/vnd.com.example.app.provider.table2"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.item/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="完整实现跨程序数据共享"><a href="#完整实现跨程序数据共享" class="headerlink" title="完整实现跨程序数据共享"></a>完整实现跨程序数据共享</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyProvider</span> <span class="keyword">extends</span> <span class="title">ContentProvider</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_DIR = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_ITEM = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE2_DIR = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TABLE1_ITEM = <span class="number">3</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//实现数据库的帮助类</span></span><br><span class="line">    <span class="keyword">private</span> MyDatabaseHelper dbHelper;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> UriMatcher uriMatcher;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        uriMatcher = <span class="keyword">new</span> UriMatcher(Uri.Matcher.NO_MATCH);</span><br><span class="line">        <span class="comment">//第一个参数为authority(一般为应用包名.provider)</span></span><br><span class="line">        <span class="comment">//第二个参数为path，即查询的表</span></span><br><span class="line">        <span class="comment">//第三个参数为自定义码</span></span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table1"</span>,TABLE1_DIR);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table1/#"</span>,TABLE1_ITEM);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table2"</span>,TABLE2_DIR);</span><br><span class="line">        uriMatcher.addUri(<span class="string">"com.example.app.provider"</span>,<span class="string">"table2/#"</span>,TABLE2_ITEM);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">OnCreate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//创建或更新数据库</span></span><br><span class="line">        dbHelper = <span class="keyword">new</span> MyDatabaseHelper(context,<span class="string">"dbName.db"</span>,<span class="keyword">null</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;<span class="comment">//返回true代表初始化成功，false则为失败</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Cursor <span class="title">query</span><span class="params">(Uri uri,String[] projection,String selection,</span></span></span><br><span class="line"><span class="function"><span class="params">                        String[] selectionArgs,String sortOrder)</span></span>&#123;</span><br><span class="line">        <span class="comment">//查询数据库</span></span><br><span class="line">        SQLiteDatabase db = dbHelper.getReadableDatabase();</span><br><span class="line">        Cursor cursor = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">switch</span>(uriMatcher.match(uri))&#123;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_DIR:</span><br><span class="line">                curos = db.query(<span class="string">"tableName"</span>,projection,selection,selectionArgs,</span><br><span class="line">                                <span class="keyword">null</span>,<span class="keyword">null</span>,sortOrder);</span><br><span class="line">                <span class="comment">//查询该表的全部数据</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//获取查询的id值</span></span><br><span class="line">                String id = uri.getPathSegments().get(<span class="number">1</span>);</span><br><span class="line">                curos = db.query(<span class="string">"tableName"</span>,projection,<span class="string">"id = ?"</span>,<span class="keyword">new</span> String[]&#123;id&#125;,</span><br><span class="line">                                <span class="keyword">null</span>,<span class="keyword">null</span>,sortOrder);</span><br><span class="line">                <span class="comment">//查询该表下的某条数据</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE2_DIR:</span><br><span class="line">                <span class="comment">//类上</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//类上</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cursor;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//插入操作与查询操作类似</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Uri <span class="title">insert</span><span class="params">(Uri uri,ContentValues values)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        想内容提供器中插入一条数据</span></span><br><span class="line"><span class="comment">        uri:确定插入的表</span></span><br><span class="line"><span class="comment">        values：插入的数据</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        添加成功后会返回表示该条新数据的uri</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//更新操作与查询操作类似</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">update</span><span class="params">(Uri uri,ContentValues values,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        更新数据时调用该方法</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        values:新的数据</span></span><br><span class="line"><span class="comment">        selection、selectionArgs:更新的条件</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回更新了的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//与查询操作类似</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">delete</span><span class="params">(Uri uri,String selection,String[] selectionArgs)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        删除数据时调用</span></span><br><span class="line"><span class="comment">        uri:同理</span></span><br><span class="line"><span class="comment">        selection、selectionArgs：同理</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        返回被删除的行数</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getType</span><span class="params">(Uri uri)</span></span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        调用该方法，是根据传入的uri返回相应的MIME类型</span></span><br><span class="line"><span class="comment">        MIME字符串主要由3部分组成:</span></span><br><span class="line"><span class="comment">        1.vnd开头</span></span><br><span class="line"><span class="comment">        2.如果URI以路径结尾，则后接android.cursor.dir/，</span></span><br><span class="line"><span class="comment">        若以id结尾，则接android.cursor.item/</span></span><br><span class="line"><span class="comment">        3.最后街上vnd.&lt;authority&gt;.&lt;path&gt;</span></span><br><span class="line"><span class="comment">        如下：</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">switch</span>(uriMatcher.match(uri))&#123;</span><br><span class="line">              <span class="keyword">case</span> TABLE1_DIR:</span><br><span class="line">                <span class="comment">//以路径结尾</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.dir/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//以id结尾</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.item/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE2_DIR:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.dir/vnd.com.example.app.provider.table2"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> TABLE1_ITEM:</span><br><span class="line">                <span class="comment">//同理</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">"vnd.android.cursor.item/vnd.com.example.app.provider.table1"</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    总体来说，内容提供器的具体操作，与数据库的操作类似，个人认为，其只是封装了数据库的操作，只对传入的路径进行增删改查操作，所以对其他路径的数据不会产生影响，所以安全。</p>
+<h3 id="访问其他程序中的数据"><a href="#访问其他程序中的数据" class="headerlink" title="访问其他程序中的数据"></a>访问其他程序中的数据</h3><p>​    内容提供器的用法一般有两种：</p>
+<p>1.使用现有的内容提供器读取和操作相应程序中的数据(如Android系统中的通讯录，短信，媒体库等)</p>
+<p>2.创建自己的内容提供器给程序的数据提供外部访问接口（如上）</p>
+<h4 id="ContentResolver的基本用法"><a href="#ContentResolver的基本用法" class="headerlink" title="ContentResolver的基本用法"></a>ContentResolver的基本用法</h4><p>​    使用ContentResolver类，实现访问内容提供器中提供的共享数据，通过Context中的getContentResolver()方法获取其实例。</p>
+<p>​    ContentResolver提供了对数据的CRUD操作（增删改查）方法，分别是insert()、update()、delete()和query()方法。这些方法中均接受一个内容URI，该URI由authority（一般为应该包名.provider）和path（查询的表名）组成，如：</p>
+<p>​    content://com.eaxmple.app.provider/table</p>
+<p>​    在得到内容URI后，需将其解析为Uri对象，如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Uri uri = Uri.pare(<span class="string">"content://com.eaxmple.app.provider/table"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//然后，利用该uri查询数据</span></span><br><span class="line">Cursor curso =context.getContentResolver().query(uri,projection,selection,selectionArgs,sortOrder);</span><br><span class="line"><span class="comment">//各参数与contentProvider中一样</span></span><br><span class="line"><span class="comment">//update(),insert(),delete()方法与数据库中的类似</span></span><br></pre></td></tr></table></figure>
+<p>然后，通过移动游标的位置遍历Cursor的所有行，取出数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if(cursor != null)&#123;</span><br><span class="line">    while(cursor.moveToNext())&#123;</span><br><span class="line">        String column1 = cursor.getString(cursor.getColumnIndex(&quot;column1&quot;));</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    //使用完关闭释放</span><br><span class="line">    cursor.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/04/24/Android四大组件之Service/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android四大组件之服务</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Android四大组件之ContentProvider内容提供器" data-title="Android四大组件之ContentProvider内容提供器" data-url="http://yoursite.com/2018/04/25/Android四大组件之ContentProvider内容提供器/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="Android四大组件之ContentProvider内容提供器">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
