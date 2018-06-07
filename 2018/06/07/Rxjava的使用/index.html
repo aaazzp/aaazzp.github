@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Rxjava的使用 | aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.创建被观察者对象 12345678910111213141516171819202122232425262728293031323334353637383940Observable&amp;lt;Integer&amp;gt; observable = Observable.create(new ObservableOnSubscribe&amp;lt;Integer&amp;gt;()&amp;#123;	 // create()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rxjava的使用">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/Rxjava的使用/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="1.创建被观察者对象 12345678910111213141516171819202122232425262728293031323334353637383940Observable&amp;lt;Integer&amp;gt; observable = Observable.create(new ObservableOnSubscribe&amp;lt;Integer&amp;gt;()&amp;#123;	 // create()">
+<meta property="og:updated_time" content="2018-06-07T12:40:23.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rxjava的使用">
+<meta name="twitter:description" content="1.创建被观察者对象 12345678910111213141516171819202122232425262728293031323334353637383940Observable&amp;lt;Integer&amp;gt; observable = Observable.create(new ObservableOnSubscribe&amp;lt;Integer&amp;gt;()&amp;#123;	 // create()">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Rxjava的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/Rxjava的使用/" class="article-date">
+  	<time datetime="2018-06-07T12:40:23.805Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Rxjava的使用
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.创建被观察者对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;Integer&gt; observable = Observable.create(<span class="keyword">new</span> ObservableOnSubscribe&lt;Integer&gt;()&#123;</span><br><span class="line">	 <span class="comment">// create() 是 RxJava 最基本的创造事件序列的方法</span></span><br><span class="line">	 <span class="comment">// 此处传入了一个 OnSubscribe 对象参数</span></span><br><span class="line">	 <span class="comment">// 当 Observable 被订阅时，OnSubscribe 的 call() 方法会自动被调用，即事件序列就会依照设定依次被触发</span></span><br><span class="line">	 <span class="comment">// 即观察者会依次调用对应事件的复写方法从而响应事件</span></span><br><span class="line">	 <span class="comment">// 从而实现被观察者调用了观察者的回调方法 &amp; 由被观察者向观察者的事件传递，即观察者模式</span></span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">// 2. 在复写的subscribe（）里定义需要发送的事件</span></span><br><span class="line">	 </span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(ObservableEmitter&lt;Integer&gt; emitter)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		 <span class="comment">// 通过 ObservableEmitter类对象产生事件并通知观察者</span></span><br><span class="line">		 <span class="comment">// ObservableEmitter类介绍</span></span><br><span class="line">           <span class="comment">// a. 定义：事件发射器</span></span><br><span class="line">           <span class="comment">// b. 作用：定义需要发送的事件 &amp; 向观察者发送事件</span></span><br><span class="line">		   emitter.next(<span class="number">1</span>);</span><br><span class="line">		   emitter.next(<span class="number">2</span>);</span><br><span class="line">		   emitter.next(<span class="number">3</span>);</span><br><span class="line">		   emitter.onComplete();</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;);</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">-扩展：RxJava 提供了其他方法用于 创建被观察者对象Observable --&gt;</span></span><br><span class="line"><span class="comment">	方法1：just(T...)：直接将传入的参数依次发送出来</span></span><br><span class="line"><span class="comment">  Observable observable = Observable.just("A", "B", "C");</span></span><br><span class="line"><span class="comment">  // 将会依次调用：</span></span><br><span class="line"><span class="comment">	onNext("A");</span></span><br><span class="line"><span class="comment">	onNext("B");</span></span><br><span class="line"><span class="comment">	onNext("C");</span></span><br><span class="line"><span class="comment">	onCompleted();</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	方法2：from(T[]) / from(Iterable&lt;? extends T&gt;) : 将传入的数组 / Iterable 拆分成具体对象后，依次发送出来</span></span><br><span class="line"><span class="comment">	String[] words = &#123;"A", "B", "C"&#125;;</span></span><br><span class="line"><span class="comment">	Observable observable = Observable.from(words);</span></span><br><span class="line"><span class="comment">	// 将会依次调用：</span></span><br><span class="line"><span class="comment">	onNext("A");</span></span><br><span class="line"><span class="comment">	onNext("B");</span></span><br><span class="line"><span class="comment">	onNext("C");</span></span><br><span class="line"><span class="comment">	onCompleted();</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>2.创建观察者并定义响应事件的行为</p>
+<p>​    发生的事件类型包括：<br>  Next事件:普通事件，向观察者发送需要响应事件的信号，被观察者可以发送无限个next信号，观察者可以接受无限个next信号,调用onNext()方法使用;</p>
+<p>  Complete事件:事件队列完结事件，该事件标志着被观察者不再发送普通事件，当被观察者发送一个Complete事件后，<br>    被观察者在Complete事件后的事件将会继续发送，但观察者收到Complete事件后，将不再继续接受任何事件（被观察者可以不发送Complete事件）,Complete事件调用onComplete()方法使用；</p>
+<p>  Error事件：事件队列异常事件，该事件标志着事件处理过程中出现异常（此时队列自动终止，不允许再有事件发出），当被观察者发送出一个Error事件后，<br>    被观察者在Error事件后的事件将继续发送，但观察者收到Error事件后将不再接受任何事件（被观察者可以不发送Error事件）,调用onError()方法发送该事件。<br>    注意：在一个正确运行的事件序列中：Complete事件与Error事件互斥，只能有一个</p>
+<p>​    具体实现:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法1：采用Observer接口</span></span><br><span class="line">		<span class="comment">//创建观察者对象</span></span><br><span class="line">		Observer&lt;Integer&gt; observer = <span class="keyword">new</span> Observer&lt;Integer&gt;()&#123;</span><br><span class="line">			<span class="comment">// 2. 创建对象时通过对应复写对应事件方法 从而 响应对应事件</span></span><br><span class="line">			</span><br><span class="line">			<span class="comment">// 观察者接收事件前，默认最先调用复写 onSubscribe（）</span></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span></span>&#123;</span><br><span class="line">				...</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 当被观察者生产Next事件 &amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Next事件作出响应"</span> + value);</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">// 当被观察者生产Error事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Complete事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">		&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 方法2：采用Subscriber 抽象类 :Subscriber类 = RxJava 内置的一个实现了 Observer 的抽象类，对 Observer 接口进行了扩展</span></span><br><span class="line">	Subscriber&lt;String&gt; subscriber = <span class="keyword">new</span> Subscriber&lt;Integer&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 2. 创建对象时通过对应复写对应事件方法 从而 响应对应事件</span></span><br><span class="line">            <span class="comment">// 观察者接收事件前，默认最先调用复写 onSubscribe（）</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Subscription s)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"开始采用subscribe连接"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Next事件 &amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Next事件作出响应"</span> + value);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Error事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Complete事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		二者基本使用方式完全一致（实质上，在RxJava的 subscribe 过程中，Observer总是会先被转换成Subscriber再使用） </span></span><br><span class="line"><span class="comment">		不同在于：</span></span><br><span class="line"><span class="comment">			Subscriber抽象类对 Observer 接口进行了扩展，新增了两个方法：</span></span><br><span class="line"><span class="comment">			1. onStart()：在还未响应事件前调用，用于做一些初始化工作</span></span><br><span class="line"><span class="comment">			2. unsubscribe()：用于取消订阅。在该方法被调用后，观察者将不再接收 &amp; 响应事件</span></span><br><span class="line"><span class="comment">				调用该方法前，先使用 isUnsubscribed() 判断状态，确定被观察者Observable是否还持有观察者Subscriber的引用，</span></span><br><span class="line"><span class="comment">				如果引用不能及时释放，就会出现内存泄露</span></span><br><span class="line"><span class="comment">		*/</span></span><br></pre></td></tr></table></figure>
+<p>3.通过Subscribe订阅链接两者<br>    实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">observable.subscribe(observer);</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">	以上方法的内部实现为：</span></span><br><span class="line"><span class="comment">		public Subscription subscribe(Subscriber subscriber) &#123;</span></span><br><span class="line"><span class="comment">    subscriber.onStart();</span></span><br><span class="line"><span class="comment">    // 步骤1中 观察者  subscriber抽象类复写的方法，用于初始化工作</span></span><br><span class="line"><span class="comment">    onSubscribe.call(subscriber);</span></span><br><span class="line"><span class="comment">    // 通过该调用，从而回调观察者中的对应方法从而响应被观察者生产的事件</span></span><br><span class="line"><span class="comment">    // 从而实现被观察者调用了观察者的回调方法 &amp; 由被观察者向观察者的事件传递，即观察者模式</span></span><br><span class="line"><span class="comment">    // 同时也看出：Observable只是生产事件，真正的发送事件是在它被订阅的时候，即当 subscribe() 方法执行时</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">	*/</span></span><br></pre></td></tr></table></figure>
+<p>4.整体链式调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(<span class="keyword">new</span> ObservableOnSubscribe&lt;Integer&gt;()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(ObservableEmitter&lt;Integer&gt; emitter)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">			emitter.onNext(<span class="number">1</span>);</span><br><span class="line">			emitter.onNext(<span class="number">2</span>);</span><br><span class="line">			emitter.onNext(<span class="number">3</span>);</span><br><span class="line">			emitter.onComplete();</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;).subscribe(<span class="keyword">new</span> Observer&lt;Integer&gt;()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span></span>&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span></span>&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/07/EventBus的基本使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          EventBus的基本使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/07/Android之View动画分析与记录/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android之View动画分析与记录</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Rxjava的使用" data-title="Rxjava的使用" data-url="http://yoursite.com/2018/06/07/Rxjava的使用/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="Rxjava的使用">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>EventBus的基本使用 | aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.添加依赖 在github上面看eventbus的最新版本,在app的build.gradle文件中导入 2.定义事件:    事件(Event) 是没有任何特殊要求的 POJO(类似于bean类),如: 1234567891011121314151617public class EventData&amp;#123;				private String name;				public EventDat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EventBus的基本使用">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/EventBus的基本使用/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="1.添加依赖 在github上面看eventbus的最新版本,在app的build.gradle文件中导入 2.定义事件:    事件(Event) 是没有任何特殊要求的 POJO(类似于bean类),如: 1234567891011121314151617public class EventData&amp;#123;				private String name;				public EventDat">
+<meta property="og:updated_time" content="2018-06-07T12:50:53.956Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EventBus的基本使用">
+<meta name="twitter:description" content="1.添加依赖 在github上面看eventbus的最新版本,在app的build.gradle文件中导入 2.定义事件:    事件(Event) 是没有任何特殊要求的 POJO(类似于bean类),如: 1234567891011121314151617public class EventData&amp;#123;				private String name;				public EventDat">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-EventBus的基本使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/EventBus的基本使用/" class="article-date">
+  	<time datetime="2018-06-07T12:50:53.848Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      EventBus的基本使用
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.添加依赖 在github上面看eventbus的最新版本,在app的build.gradle文件中导入</p>
+<p>2.定义事件:<br>    事件(Event) 是没有任何特殊要求的 POJO(类似于bean类),如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventData</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> String name;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">EventData</span><span class="params">()</span></span>&#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.name = name;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> name;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>3.在Activity的onCreate()方法中注册 或Fragment中的onCreateView()方法中注册<br>一般情况下调用它的默认方法，注册即可:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().register(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<p>​    同时,需要在activity 的onDestroy()或Fragment中的onDestroy()方法中销毁，<br>同样，一般情况下调用其默认方法即可:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().unregister(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<p>4.准备Subscriber（订阅者）<br>    Subscriber 方法使用 @subscribe 注解定义，实现了事件处理方法。(在EventBus3中，方法名可以自由定义)<br>如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//该注解下的方法运行在主线程，即UI线程中。</span></span><br><span class="line">	<span class="meta">@Subscribe</span>(threadMode = TreadMode.MAIN)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEventData</span><span class="params">(EventData eventData)</span></span>&#123;</span><br><span class="line">		<span class="comment">//logic...</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>​    在EventBus中会帮我们处理好线程的问题。以上的注解为运行在主线程中，<br>所有的注解定义如下：</p>
+<p>​    1.ThreadMode.POSTING（默认）<br>        Subscriber 方法会在发布该事件的同一线程被调用。事件发送之后，所有的Subscriber方法都会被调用,<br>    由于没有切换线程，所以开销会比较小。使用这种模式的事件回调应该迅速返回以防阻塞发送事件的线程（可能是主线程）。</p>
+<p>​    2.ThreadMode.MAIN<br>        该注解下的方法会运行在主线程中，如果发送事件的线程是主线程的话，会直接调用 Subscriber 方法（同步调用，表现同 ThreadMode.POSTING）。<br>        使用这种模式的事件回调必须迅速返回以防阻塞发送事件的线程。</p>
+<p>​    3.ThreadMode.MAIN_ORDERED<br>        该注解下的方法同样会运行在主线程中，事件总是排队等待以传递给 Subscriber。<br>        该模式保证了事件处理有一个更严格一致的顺序。<br>        使用这种模式的事件回调必须迅速返回以防阻塞发送事件的线程</p>
+<p>​    4.ThreadMode.BACKGROUND<br>        该注解下的方法会运行在后台线程中。如果发布事件的线程不是主线程，事件回调将直接在发布线程被                调用。否则，EventBus 使用一个后台线程（单例）来按序调用每个回调。使用这种模式的事件回调应该尝试快速返回以尽量不要阻塞后台线程</p>
+<p>​    5.ThreadMode.ASYNC<br>        事件回调方法总是在单独的线程被调用。<br>        这些线程不会是发布事件的线程，也不会是主线程。向此模式的回调方法 post 事件永远不会发生等待。<br>        如果回调方法执行网络请求之类的耗时操作的话则应该使用这种模式，<br>        避免同时触发大量长时间运行的异步任务来限制并发线程的数量，EventBus 使用线程池有效地重用已完    成的异步任务线程。</p>
+<p>5.发布事件 </p>
+<p>​    所有已注册并且匹配该类型的 Subscriber（订阅者）都会收到该事件：在代码的任何地方中均可调用:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">EventData ed = <span class="keyword">new</span> EventData();</span><br><span class="line">	ed.setName(<span class="string">"zzp"</span>);</span><br><span class="line">	EventBus.getDefault().post(ed);</span><br></pre></td></tr></table></figure>
+<p>通过以上几个步骤就可以简单地使用EventBus了。</p>
+<p>6.Sticky Events (粘性事件)</p>
+<p>​    对于某些事件，在其被 post 之后我们仍然关心它携带的信息,想要保存最近一次的值;    对此，可以使用Sticky Events,EventBus 会将最后一个特定类型的粘性事件保存在内存中，这个粘性事件可以传递给 Subscriber 或者被直接查询。</p>
+<p>​    调用postSticky()方法发送粘性事件<br>    EventBus.getDefault().postSticky(new EventData(“zzp”));</p>
+<p>在注解中加入 sticky = true，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Subscribe</span>(sticky = <span class="keyword">true</span>, threadMode = ThreadMode.MAIN)</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(EventData ea)</span> </span>&#123;   </span><br><span class="line"></span><br><span class="line">		<span class="comment">//log..</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，所有订阅粘性时间的方法在注册的时候就会立即收到之前 post 的粘性事件。</p>
+<p>7.手动获取/移除粘性事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取:</span></span><br><span class="line">EventData ed = EventBus.getDefault().getStickyEvent(EventData.class);</span><br><span class="line">	</span><br><span class="line"><span class="comment">//移除:</span></span><br><span class="line"><span class="keyword">if</span>(ed != <span class="keyword">null</span>) EventBus.getDefault().removeStickyEvent(ed);</span><br></pre></td></tr></table></figure>
+<p>8.优先级和事件的取消</p>
+<p>​    优先级只影响相同 ThreadMode 中的 Subscriber。</p>
+<p>​    在注解中设置优先级:<br>    @Subscribe(priority = 1);</p>
+<p>取消事件的传递：<br>        在 Subscriber 的事件处理线程调用 cancelEventDelivery(Object event)<br>        来取消事件传递. 进一步的事件传递将被取消，接下来的 Subscriber 都不会接收到事件<br>        事件取消仅限于用在 ThreadMode.PostThread 模式下的事件处理方法。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/07/Rxjava的使用/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Rxjava的使用</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="EventBus的基本使用" data-title="EventBus的基本使用" data-url="http://yoursite.com/2018/06/07/EventBus的基本使用/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="EventBus的基本使用">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

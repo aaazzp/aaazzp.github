@@ -169,6 +169,256 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-EventBus的基本使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/EventBus的基本使用/" class="article-date">
+  	<time datetime="2018-06-07T12:50:53.848Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/EventBus的基本使用/">
+        EventBus的基本使用
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.添加依赖 在github上面看eventbus的最新版本,在app的build.gradle文件中导入</p>
+<p>2.定义事件:<br>    事件(Event) 是没有任何特殊要求的 POJO(类似于bean类),如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventData</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> String name;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">EventData</span><span class="params">()</span></span>&#123;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.name = name;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> name;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>3.在Activity的onCreate()方法中注册 或Fragment中的onCreateView()方法中注册<br>一般情况下调用它的默认方法，注册即可:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().register(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<p>​    同时,需要在activity 的onDestroy()或Fragment中的onDestroy()方法中销毁，<br>同样，一般情况下调用其默认方法即可:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EventBus.getDefault().unregister(<span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+<p>4.准备Subscriber（订阅者）<br>    Subscriber 方法使用 @subscribe 注解定义，实现了事件处理方法。(在EventBus3中，方法名可以自由定义)<br>如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//该注解下的方法运行在主线程，即UI线程中。</span></span><br><span class="line">	<span class="meta">@Subscribe</span>(threadMode = TreadMode.MAIN)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEventData</span><span class="params">(EventData eventData)</span></span>&#123;</span><br><span class="line">		<span class="comment">//logic...</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>​    在EventBus中会帮我们处理好线程的问题。以上的注解为运行在主线程中，<br>所有的注解定义如下：</p>
+<p>​    1.ThreadMode.POSTING（默认）<br>        Subscriber 方法会在发布该事件的同一线程被调用。事件发送之后，所有的Subscriber方法都会被调用,<br>    由于没有切换线程，所以开销会比较小。使用这种模式的事件回调应该迅速返回以防阻塞发送事件的线程（可能是主线程）。</p>
+<p>​    2.ThreadMode.MAIN<br>        该注解下的方法会运行在主线程中，如果发送事件的线程是主线程的话，会直接调用 Subscriber 方法（同步调用，表现同 ThreadMode.POSTING）。<br>        使用这种模式的事件回调必须迅速返回以防阻塞发送事件的线程。</p>
+<p>​    3.ThreadMode.MAIN_ORDERED<br>        该注解下的方法同样会运行在主线程中，事件总是排队等待以传递给 Subscriber。<br>        该模式保证了事件处理有一个更严格一致的顺序。<br>        使用这种模式的事件回调必须迅速返回以防阻塞发送事件的线程</p>
+<p>​    4.ThreadMode.BACKGROUND<br>        该注解下的方法会运行在后台线程中。如果发布事件的线程不是主线程，事件回调将直接在发布线程被                调用。否则，EventBus 使用一个后台线程（单例）来按序调用每个回调。使用这种模式的事件回调应该尝试快速返回以尽量不要阻塞后台线程</p>
+<p>​    5.ThreadMode.ASYNC<br>        事件回调方法总是在单独的线程被调用。<br>        这些线程不会是发布事件的线程，也不会是主线程。向此模式的回调方法 post 事件永远不会发生等待。<br>        如果回调方法执行网络请求之类的耗时操作的话则应该使用这种模式，<br>        避免同时触发大量长时间运行的异步任务来限制并发线程的数量，EventBus 使用线程池有效地重用已完    成的异步任务线程。</p>
+<p>5.发布事件 </p>
+<p>​    所有已注册并且匹配该类型的 Subscriber（订阅者）都会收到该事件：在代码的任何地方中均可调用:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">EventData ed = <span class="keyword">new</span> EventData();</span><br><span class="line">	ed.setName(<span class="string">"zzp"</span>);</span><br><span class="line">	EventBus.getDefault().post(ed);</span><br></pre></td></tr></table></figure>
+<p>通过以上几个步骤就可以简单地使用EventBus了。</p>
+<p>6.Sticky Events (粘性事件)</p>
+<p>​    对于某些事件，在其被 post 之后我们仍然关心它携带的信息,想要保存最近一次的值;    对此，可以使用Sticky Events,EventBus 会将最后一个特定类型的粘性事件保存在内存中，这个粘性事件可以传递给 Subscriber 或者被直接查询。</p>
+<p>​    调用postSticky()方法发送粘性事件<br>    EventBus.getDefault().postSticky(new EventData(“zzp”));</p>
+<p>在注解中加入 sticky = true，如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Subscribe</span>(sticky = <span class="keyword">true</span>, threadMode = ThreadMode.MAIN)</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(EventData ea)</span> </span>&#123;   </span><br><span class="line"></span><br><span class="line">		<span class="comment">//log..</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，所有订阅粘性时间的方法在注册的时候就会立即收到之前 post 的粘性事件。</p>
+<p>7.手动获取/移除粘性事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取:</span></span><br><span class="line">EventData ed = EventBus.getDefault().getStickyEvent(EventData.class);</span><br><span class="line">	</span><br><span class="line"><span class="comment">//移除:</span></span><br><span class="line"><span class="keyword">if</span>(ed != <span class="keyword">null</span>) EventBus.getDefault().removeStickyEvent(ed);</span><br></pre></td></tr></table></figure>
+<p>8.优先级和事件的取消</p>
+<p>​    优先级只影响相同 ThreadMode 中的 Subscriber。</p>
+<p>​    在注解中设置优先级:<br>    @Subscribe(priority = 1);</p>
+<p>取消事件的传递：<br>        在 Subscriber 的事件处理线程调用 cancelEventDelivery(Object event)<br>        来取消事件传递. 进一步的事件传递将被取消，接下来的 Subscriber 都不会接收到事件<br>        事件取消仅限于用在 ThreadMode.PostThread 模式下的事件处理方法。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Rxjava的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/Rxjava的使用/" class="article-date">
+  	<time datetime="2018-06-07T12:40:23.805Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/Rxjava的使用/">
+        Rxjava的使用
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.创建被观察者对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Observable&lt;Integer&gt; observable = Observable.create(<span class="keyword">new</span> ObservableOnSubscribe&lt;Integer&gt;()&#123;</span><br><span class="line">	 <span class="comment">// create() 是 RxJava 最基本的创造事件序列的方法</span></span><br><span class="line">	 <span class="comment">// 此处传入了一个 OnSubscribe 对象参数</span></span><br><span class="line">	 <span class="comment">// 当 Observable 被订阅时，OnSubscribe 的 call() 方法会自动被调用，即事件序列就会依照设定依次被触发</span></span><br><span class="line">	 <span class="comment">// 即观察者会依次调用对应事件的复写方法从而响应事件</span></span><br><span class="line">	 <span class="comment">// 从而实现被观察者调用了观察者的回调方法 &amp; 由被观察者向观察者的事件传递，即观察者模式</span></span><br><span class="line">	 </span><br><span class="line">	 <span class="comment">// 2. 在复写的subscribe（）里定义需要发送的事件</span></span><br><span class="line">	 </span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(ObservableEmitter&lt;Integer&gt; emitter)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">		 <span class="comment">// 通过 ObservableEmitter类对象产生事件并通知观察者</span></span><br><span class="line">		 <span class="comment">// ObservableEmitter类介绍</span></span><br><span class="line">           <span class="comment">// a. 定义：事件发射器</span></span><br><span class="line">           <span class="comment">// b. 作用：定义需要发送的事件 &amp; 向观察者发送事件</span></span><br><span class="line">		   emitter.next(<span class="number">1</span>);</span><br><span class="line">		   emitter.next(<span class="number">2</span>);</span><br><span class="line">		   emitter.next(<span class="number">3</span>);</span><br><span class="line">		   emitter.onComplete();</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;);</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">-扩展：RxJava 提供了其他方法用于 创建被观察者对象Observable --&gt;</span></span><br><span class="line"><span class="comment">	方法1：just(T...)：直接将传入的参数依次发送出来</span></span><br><span class="line"><span class="comment">  Observable observable = Observable.just("A", "B", "C");</span></span><br><span class="line"><span class="comment">  // 将会依次调用：</span></span><br><span class="line"><span class="comment">	onNext("A");</span></span><br><span class="line"><span class="comment">	onNext("B");</span></span><br><span class="line"><span class="comment">	onNext("C");</span></span><br><span class="line"><span class="comment">	onCompleted();</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	方法2：from(T[]) / from(Iterable&lt;? extends T&gt;) : 将传入的数组 / Iterable 拆分成具体对象后，依次发送出来</span></span><br><span class="line"><span class="comment">	String[] words = &#123;"A", "B", "C"&#125;;</span></span><br><span class="line"><span class="comment">	Observable observable = Observable.from(words);</span></span><br><span class="line"><span class="comment">	// 将会依次调用：</span></span><br><span class="line"><span class="comment">	onNext("A");</span></span><br><span class="line"><span class="comment">	onNext("B");</span></span><br><span class="line"><span class="comment">	onNext("C");</span></span><br><span class="line"><span class="comment">	onCompleted();</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>2.创建观察者并定义响应事件的行为</p>
+<p>​    发生的事件类型包括：<br>  Next事件:普通事件，向观察者发送需要响应事件的信号，被观察者可以发送无限个next信号，观察者可以接受无限个next信号,调用onNext()方法使用;</p>
+<p>  Complete事件:事件队列完结事件，该事件标志着被观察者不再发送普通事件，当被观察者发送一个Complete事件后，<br>    被观察者在Complete事件后的事件将会继续发送，但观察者收到Complete事件后，将不再继续接受任何事件（被观察者可以不发送Complete事件）,Complete事件调用onComplete()方法使用；</p>
+<p>  Error事件：事件队列异常事件，该事件标志着事件处理过程中出现异常（此时队列自动终止，不允许再有事件发出），当被观察者发送出一个Error事件后，<br>    被观察者在Error事件后的事件将继续发送，但观察者收到Error事件后将不再接受任何事件（被观察者可以不发送Error事件）,调用onError()方法发送该事件。<br>    注意：在一个正确运行的事件序列中：Complete事件与Error事件互斥，只能有一个</p>
+<p>​    具体实现:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法1：采用Observer接口</span></span><br><span class="line">		<span class="comment">//创建观察者对象</span></span><br><span class="line">		Observer&lt;Integer&gt; observer = <span class="keyword">new</span> Observer&lt;Integer&gt;()&#123;</span><br><span class="line">			<span class="comment">// 2. 创建对象时通过对应复写对应事件方法 从而 响应对应事件</span></span><br><span class="line">			</span><br><span class="line">			<span class="comment">// 观察者接收事件前，默认最先调用复写 onSubscribe（）</span></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span></span>&#123;</span><br><span class="line">				...</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 当被观察者生产Next事件 &amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Next事件作出响应"</span> + value);</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">// 当被观察者生产Error事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Complete事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">		&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 方法2：采用Subscriber 抽象类 :Subscriber类 = RxJava 内置的一个实现了 Observer 的抽象类，对 Observer 接口进行了扩展</span></span><br><span class="line">	Subscriber&lt;String&gt; subscriber = <span class="keyword">new</span> Subscriber&lt;Integer&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 2. 创建对象时通过对应复写对应事件方法 从而 响应对应事件</span></span><br><span class="line">            <span class="comment">// 观察者接收事件前，默认最先调用复写 onSubscribe（）</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Subscription s)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"开始采用subscribe连接"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Next事件 &amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Next事件作出响应"</span> + value);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Error事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 当被观察者生产Complete事件&amp; 观察者接收到时，会调用该复写方法 进行响应</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*</span></span><br><span class="line"><span class="comment">		二者基本使用方式完全一致（实质上，在RxJava的 subscribe 过程中，Observer总是会先被转换成Subscriber再使用） </span></span><br><span class="line"><span class="comment">		不同在于：</span></span><br><span class="line"><span class="comment">			Subscriber抽象类对 Observer 接口进行了扩展，新增了两个方法：</span></span><br><span class="line"><span class="comment">			1. onStart()：在还未响应事件前调用，用于做一些初始化工作</span></span><br><span class="line"><span class="comment">			2. unsubscribe()：用于取消订阅。在该方法被调用后，观察者将不再接收 &amp; 响应事件</span></span><br><span class="line"><span class="comment">				调用该方法前，先使用 isUnsubscribed() 判断状态，确定被观察者Observable是否还持有观察者Subscriber的引用，</span></span><br><span class="line"><span class="comment">				如果引用不能及时释放，就会出现内存泄露</span></span><br><span class="line"><span class="comment">		*/</span></span><br></pre></td></tr></table></figure>
+<p>3.通过Subscribe订阅链接两者<br>    实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">observable.subscribe(observer);</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">	以上方法的内部实现为：</span></span><br><span class="line"><span class="comment">		public Subscription subscribe(Subscriber subscriber) &#123;</span></span><br><span class="line"><span class="comment">    subscriber.onStart();</span></span><br><span class="line"><span class="comment">    // 步骤1中 观察者  subscriber抽象类复写的方法，用于初始化工作</span></span><br><span class="line"><span class="comment">    onSubscribe.call(subscriber);</span></span><br><span class="line"><span class="comment">    // 通过该调用，从而回调观察者中的对应方法从而响应被观察者生产的事件</span></span><br><span class="line"><span class="comment">    // 从而实现被观察者调用了观察者的回调方法 &amp; 由被观察者向观察者的事件传递，即观察者模式</span></span><br><span class="line"><span class="comment">    // 同时也看出：Observable只是生产事件，真正的发送事件是在它被订阅的时候，即当 subscribe() 方法执行时</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">	*/</span></span><br></pre></td></tr></table></figure>
+<p>4.整体链式调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(<span class="keyword">new</span> ObservableOnSubscribe&lt;Integer&gt;()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribe</span><span class="params">(ObservableEmitter&lt;Integer&gt; emitter)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">			emitter.onNext(<span class="number">1</span>);</span><br><span class="line">			emitter.onNext(<span class="number">2</span>);</span><br><span class="line">			emitter.onNext(<span class="number">3</span>);</span><br><span class="line">			emitter.onComplete();</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;).subscribe(<span class="keyword">new</span> Observer&lt;Integer&gt;()&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span></span>&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Integer value)</span></span>&#123;</span><br><span class="line">			...</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"对Error事件作出响应"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onComplete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            Log.d(TAG, <span class="string">"对Complete事件作出响应"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Android之View动画分析与记录" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/Android之View动画分析与记录/" class="article-date">
+  	<time datetime="2018-06-07T08:58:12.927Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/Android之View动画分析与记录/">
+        Android之View动画分析与记录
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="动画分类"><a href="#动画分类" class="headerlink" title="动画分类"></a>动画分类</h3><p>​    android动画可分为：View动画、帧动画、属性动画。</p>
+<h4 id="View动画"><a href="#View动画" class="headerlink" title="View动画"></a>View动画</h4><p>​    view动画的作用对象是view，支持4种动画效果，分别为：平移动画TranslateAnimation、缩放动画ScaleAnimation、旋转动画RotateAnimation、透明度动画AlphaAnimation。</p>
+<p>​    view动画一般是使用xml文件定义，可以是单个动画，也可以是一系列的动画组合，该文件放在 res/anim/文件目录下（没有anim则新建）。</p>
+<p>​    4种动画在xml文件中对应得标签为<translate>、<scale>、<rotate>、<alpha>。</alpha></rotate></scale></translate></p>
+<p>​    xml文件一般如下定义:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"...."</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:interpolator</span>=<span class="string">"@[package:]anim/interpolator_resource"</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:shareInterpolator</span>=<span class="string">[</span>"<span class="attr">true</span>"|"<span class="attr">false</span>"]</span></span><br><span class="line"><span class="tag">     &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">alpha</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:fromAlpha</span>=<span class="string">"float"</span> //开始透明度</span></span><br><span class="line"><span class="tag">           <span class="attr">android:toAlpha</span>=<span class="string">"float"</span>  //结束透明度</span></span><br><span class="line"><span class="tag">           /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scale</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:fromXScale</span>=<span class="string">"float"</span> //<span class="attr">x</span>轴上的起始缩放度</span></span><br><span class="line"><span class="tag">           <span class="attr">android:toXScale</span>=<span class="string">"float"</span>  // 结束时的缩放度</span></span><br><span class="line"><span class="tag">           <span class="attr">android:fromYScale</span>=<span class="string">"float"</span> //<span class="attr">Y</span>轴</span></span><br><span class="line"><span class="tag">           <span class="attr">android:toYScale</span>=<span class="string">"float"</span> </span></span><br><span class="line"><span class="tag">           <span class="attr">android:pivotX</span>=<span class="string">"float"</span> //缩放<span class="attr">x</span>坐标</span></span><br><span class="line"><span class="tag">           <span class="attr">android:pivotY</span>=<span class="string">"float"</span> //<span class="attr">y</span>坐标</span></span><br><span class="line"><span class="tag">           /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">translate</span></span></span><br><span class="line"><span class="tag">               <span class="attr">android:fromXDelta</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">android:toXDelta</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">android:fromYDelta</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">android:toYDelta</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">               /&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">rotate</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:fromDegrees</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:toDegrees</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:pivotX</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:pivotY</span>=<span class="string">"float"</span></span></span><br><span class="line"><span class="tag">            /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">    	//另一组动画</span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>​    <set>标签表示是动画集合，对应于AnimationSet类。</set></p>
+<p>​    应用如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">View someView = findViewById(R.id.xxx);</span><br><span class="line">Animation animation = AnimationUtils.loadAnimation(<span class="keyword">this</span>,R.anim.animation_source);</span><br><span class="line">someView.startAnimation(animation);</span><br></pre></td></tr></table></figure>
+<p>​    除了在xml中定义外，还可以通过代码定义，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​    监听动画过程，可以为view动画添加AnimationListener监听动画的过程。</p>
+<h4 id="自定义View动画"><a href="#自定义View动画" class="headerlink" title="自定义View动画"></a>自定义View动画</h4><p>​    自定义View动画需要继承自Animation抽象类，重写它的initialize()、applyTransformation()方法。</p>
+<h3 id="帧动画"><a href="#帧动画" class="headerlink" title="帧动画"></a>帧动画</h3><p>​    它是顺序播放一组预定义好的图片，使用AnimationDrawable类来使用。</p>
+<p>注意，帧动画会比较容易引起OOM，尽量避免使用较大尺寸的图片。</p>
+<p>​    首先需要通过xml来定义，帧动画的文件放在res/drawable/目录下</p>
+<p>​    </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">animation-list</span></span></span><br><span class="line"><span class="tag">                <span class="attr">xmlns:android</span>=<span class="string">"..."</span></span></span><br><span class="line"><span class="tag">                <span class="attr">android:oneshot</span>=<span class="string">"false"</span></span></span><br><span class="line"><span class="tag">                &gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">item</span> <span class="attr">android:drawable</span>=<span class="string">"img_source"</span> <span class="attr">android:duration</span>=<span class="string">"300"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">.......</span>/&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">animation-list</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>​    然后将该Drawable文件作为View的背景并通过Drawable来播放动画即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">View someView = ...;</span><br><span class="line">someView.setBackgroudResourc(R.drawable.xxx);</span><br><span class="line">AnimationDrawable ad = (AnimationDrawable) someView.getBackgroud();</span><br><span class="line">ad.start();</span><br></pre></td></tr></table></figure>
+<h3 id="View动画的使用场景"><a href="#View动画的使用场景" class="headerlink" title="View动画的使用场景"></a>View动画的使用场景</h3><h4 id="LayoutAnimation"><a href="#LayoutAnimation" class="headerlink" title="LayoutAnimation"></a>LayoutAnimation</h4><p>​    作用于ViewGroup，为它指定一个动画，当它的子元素出场时都会有这种动画效果。</p>
+<p>​    定义如下：( res/anim/xxx)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">layoutAnimation</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">xmlns:android</span>=<span class="string">"..."</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:delay</span>=<span class="string">"0.5"</span> //表示子元素的开始动画时间延迟，如动画持续时间是<span class="attr">1</span>秒，</span></span><br><span class="line"><span class="tag">                 //则<span class="attr">0.5</span>*<span class="attr">1000</span>=<span class="string">500，延迟500ms</span></span></span><br><span class="line"><span class="tag">                 <span class="attr">android:animationOrder</span>=<span class="string">"normal"</span> //表示子元素的动画顺序</span></span><br><span class="line"><span class="tag">                 //三种选项：<span class="attr">normal</span>（顺序显示）、<span class="attr">reverse</span>（逆向显示）、<span class="attr">random</span>（随机显示）</span></span><br><span class="line"><span class="tag">                 <span class="attr">android:animation</span>=<span class="string">"@anim/xxx"</span> //为子元素指定具体的入场动画</span></span><br><span class="line"><span class="tag">                 &gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">layoutAnimation</span>&gt;</span></span><br><span class="line">//同样的，该效果在代码中可通过LayoutAnimationController实现</span><br></pre></td></tr></table></figure>
+<p>​    然后为ViewGroup指定android:layoutAnimation属性，adnroid:layoutAnimation=”@anim/layoutAnimation_source”</p>
+<h4 id="Activity的切换效果"><a href="#Activity的切换效果" class="headerlink" title="Activity的切换效果"></a>Activity的切换效果</h4><p>​    主要用overridePendingTransition(int enterAnim,int exitAnim)方法，该方法必须在startActivity()或finish()后调用才生效。</p>
+<h3 id="属性动画"><a href="#属性动画" class="headerlink" title="属性动画"></a>属性动画</h3><p>​    属性动画可以对任意对象的属性进行动画。动画默认时间间隔为300ms，默认帧率为10帧每秒，在一个时间间隔内完成对象从一个属性到另一个属性的转换。（但是属性动画从API11以上才引入）</p>
+<p>​    使用如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ObjectAnimator.ofFloat(viewObject,<span class="string">"translationY"</span>,delta).start();</span><br><span class="line"><span class="comment">//该效果为在Y轴上平移delta的距离</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//动画集合</span></span><br><span class="line">AnimationSet set = <span class="keyword">new</span> AnimationSet();</span><br><span class="line">set.playTogether(</span><br><span class="line">	ObjectAnimator.ofFloat(targetView,<span class="string">"rotationX"</span>,<span class="number">0</span>,<span class="number">360</span>),</span><br><span class="line">    ObjectAnimator.ofFloat(...),</span><br><span class="line">    ...</span><br><span class="line">)</span><br><span class="line">    set.setDuration(<span class="number">3000</span>).start();</span><br></pre></td></tr></table></figure>
+<p>​    在xml中的定义如下：（res/animator目录下，animator目录没有则创建）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">set</span></span></span><br><span class="line"><span class="tag">     <span class="attr">android:ordering</span>=<span class="string">[</span>"<span class="attr">together</span>"|"<span class="attr">sequentially</span>"]&gt;</span> //指定动画播放顺序，togetther代表同时播放，</span><br><span class="line">    //另一个为顺序播放</span><br><span class="line"><span class="tag">&lt;<span class="name">obejceAnimator</span></span></span><br><span class="line"><span class="tag">                <span class="attr">android:propertyName</span>=<span class="string">"string"</span> //属性名称</span></span><br><span class="line"><span class="tag">                <span class="attr">android:duration</span>=<span class="string">"int"</span> //时长</span></span><br><span class="line"><span class="tag">                <span class="attr">android:valueFrom</span>=<span class="string">"float|int|color"</span> //属性起始值</span></span><br><span class="line"><span class="tag">                <span class="attr">android:valueTo</span>=<span class="string">"float|int|color"</span>  //结束值</span></span><br><span class="line"><span class="tag">                <span class="attr">android:startOffset</span>=<span class="string">"int"</span> //动画的延迟时间</span></span><br><span class="line"><span class="tag">                <span class="attr">android:repeatCount</span>=<span class="string">"int"</span> //重复次数 默认为<span class="attr">0</span>，<span class="attr">-1</span>代表无限循环</span></span><br><span class="line"><span class="tag">                <span class="attr">android:repeatMode</span>=<span class="string">[</span>"<span class="attr">restart</span>"|"<span class="attr">reverse</span>"] //重复模式</span></span><br><span class="line"><span class="tag">                <span class="attr">android:valueType</span>=<span class="string">[</span>"<span class="attr">intType</span>"|"<span class="attr">floatType</span>"]</span></span><br><span class="line"><span class="tag">                //表示<span class="attr">android:propertyName</span>所指定的属性类型，有<span class="attr">intType</span>和<span class="attr">floatType</span>可选，</span></span><br><span class="line"><span class="tag">                //但<span class="attr">propertyName</span>指定为颜色的话，则该属性不应指定</span></span><br><span class="line"><span class="tag">                &gt;</span><span class="tag">&lt;/<span class="name">obejceAnimator</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">animator</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:duration</span>=<span class="string">"int"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:valueFrom</span>=<span class="string">"float|int|color"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:valueTo</span>=<span class="string">"float|int|color"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:startOffset</span>=<span class="string">"int"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:repeatCount</span>=<span class="string">"int"</span></span></span><br><span class="line"><span class="tag">              <span class="attr">android:repeatMode</span>=<span class="string">[</span>"<span class="attr">restart</span>"|"<span class="attr">reverse</span>"]</span></span><br><span class="line"><span class="tag">              <span class="attr">android:valueType</span>=<span class="string">[</span>"<span class="attr">intType</span>"|"<span class="attr">floatType</span>"]  </span></span><br><span class="line"><span class="tag">              &gt;</span><span class="tag">&lt;/<span class="name">animator</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">    	...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>​    在xml中可以定义ValueAnimator,ObjectAnimator,AnimatorSet，其中，<set>对应AnimatorSet,<animator>对应ValueAnimator，<objectanimator>对应于ObjectAnimator</objectanimator></animator></set></p>
+<h4 id="插值器和估值器"><a href="#插值器和估值器" class="headerlink" title="插值器和估值器"></a>插值器和估值器</h4><p>​    TimeInterpolator为时间插值器，它的作用是根据时间流逝的百分比计算出当前属性值改变的百分比。</p>
+<p>系统预置的有LinearInterpolator线性插值器（匀速动画）、AccelerateDecelerateInterpolator(加速减速插值器，动画两头慢中间快)、DecelerateInterpolator（减速插值器，动画越来越慢）</p>
+<p>​    TypeInterpolator为类型估值器，它的作用是根据当前属性改变的百分比来计算改变后的属性值。系统预置的有IntEvaluator（针对整型属性）、floatEvaluator(针对浮点型)等。</p>
+<p>​    我们可以自定义插值器和估值器，需要实现Interpolator或TimeInterpolator（自定义插值器），或实现TypeEvaluator(估值器)</p>
+<h4 id="属性动画的监听器"><a href="#属性动画的监听器" class="headerlink" title="属性动画的监听器"></a>属性动画的监听器</h4><p>​    AnimatorUpdateListener和AnimatorListener用于监听动画的播放过程。</p>
+<h4 id="对任意属性做动画"><a href="#对任意属性做动画" class="headerlink" title="对任意属性做动画"></a>对任意属性做动画</h4><p>​    属性动画要求动画作用的对象提供该属性的get、set方法，即要想让动画生效，必须满足以下两个条件，</p>
+<p>​    1.object必须提供setProperty方法，如果动画的时候没有传递初始值，那么还要提供getProperty方法，因为系统需要获取property属性的初始值。</p>
+<p>​    2.object的setProperty对属性所作的改变必须能够通过某种方法放映出来。</p>
+<p>​    解决办法1.</p>
+<p>用一个类来包装原始对象，间接为其提供get,set方法。如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​    解决办法2：</p>
+<p>采用ValueAnimator，监听动画过程，手动实现属性的改变。ValueAnimator本身不做用于任何对象，它对一个值做动画，然后可以监听其动画过程，在该过程中修改对象的属性值，这样就等于对对象做了动画。如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Android四大组件之ContentProvider内容提供器" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -569,180 +819,6 @@
     <div class="article-entry" itemprop="articleBody">
       
         <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">String,StringBuilder,StringBuffer的区别:</span></span><br><span class="line"><span class="comment">		String(适用于少量的字符串操作的情况) :不可变且速度最慢;如 String s = "123"; s = s +"456"; </span></span><br><span class="line"><span class="comment">				最后打印s 会输出123456。表面上看起来好像是s改变了，但实际上JVM执行的过程是--&gt;新建String对象 s 并赋值为“123”--&gt; 新建新的对象s</span></span><br><span class="line"><span class="comment">				在原有的内容基础上再加上"456"并赋值给s,原来的s则会被回收掉；实际上s是没有变过的。所以说，String是不可变的，且由于不能创建新的</span></span><br><span class="line"><span class="comment">				String对象，所以执行速度会慢。（注：String s = "123"+"456"--&gt;该表达式等价于s = "123456";所以是没有创建两个s去进行赋值。</span></span><br><span class="line"><span class="comment">				</span></span><br><span class="line"><span class="comment">		以下两个方法均是：直接对该对象进行更改，而不进行创建和回收的操作，所以执行速度快。</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">		StringBuilder(适用于单线程下在字符缓冲区进行大量操作的情况):可变，执行速度最快(非线程安全的);（一般情况下，均是使用该方法）。</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">		StringBuffer(适用多线程下在字符缓冲区进行大量操作的情况):可变;因为StringBuffer对象在字符串缓冲区被多个线程使用时，</span></span><br><span class="line"><span class="comment">		它的许多方法中可以带有synchronized关键字(也因此会导致执行速度变慢)，所以可以保证线程是安全的。(但一般情况下，也比较少使用)。</span></span><br><span class="line"><span class="comment">		*/</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-程序设计的六大原则" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/17/程序设计的六大原则/" class="article-date">
-  	<time datetime="2018-04-17T14:27:39.836Z" itemprop="datePublished">2018-04-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/程序设计的六大原则/">
-        程序设计的六大原则
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="单一职责原则（只有一个功能）"><a href="#单一职责原则（只有一个功能）" class="headerlink" title="单一职责原则（只有一个功能）"></a>单一职责原则（只有一个功能）</h4><p>​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。<br>    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。</p>
-<p>优点：消除耦合，减小因需求变化引起代码僵化。</p>
-<p>（个人认为）缺点：造成编写过多的类。</p>
-<p>（个人认为）如编写的各种工具类，实现的是某一方面的单一功能。</p>
-<h4 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h4><p>​    子类必须能够替换它们的父类（基类型）。如果一个软件实体使用的是基类，那么当把这个基类<br>替换为其子类，程序的行为不会发生任何变化。<br>    优点：很容易的实现同一父类下各个子类的互换，而客户端可以毫不察觉（即不会造成其他的影响）。（个人认为）如：android中继承与ViewGroup的子类（LinearLayout,RelativeLayout),均可作为控件的容器。</p>
-<h4 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h4><p>​    实现依赖于抽象，而不依赖于具体；抽象不应当依赖于细节；细节应当依赖于抽象；针对接口编程，不针对实现编程。<br>    （个人认为）总的来说，是先把程序需要完成的功能，利用接口抽象统一规范，具体实现时根据接口的规范去编程，以及实现细节。<br>    优点：依赖倒置原则使细节和策略都依赖于抽象，抽象的稳定性决定了系统的稳定性<br>    缺点：在抽象层次上的耦合虽然有灵活性，但也带来了额外的复杂性，<br>        如果一个具体类发生变化的可能性非常小（个人认为：问题是，该如何判断某一个类变化的可能性？因为项目中有太多的变化），那么抽象耦合能发挥的好处便十分有限（个人认为，因为变化小的具体类，直接具体编写完整的实现会更为清晰），这时可以用具体耦合反而会更好。<br>    层次化：所有结构良好的面向对象构架都具有清晰的层次定义，每个层次通过一个定义良好的、受控的接口向外提供一组内聚的服务。<br>    依赖于抽象：建议不依赖于具体类，即程序中所有的依赖关系都应该终止于抽象类或者接口。尽量做到：<br>            1.任何变量都不该持有一个指向具体类的指针或引用（避免变化时，需逐一修改）；<br>            2.任何类都不该从具体类派生（因为java中类为单继承）<br>            3.任何方法都不应该复写它的任何基类中已经实现的方法（不然会造成重复代码）。</p>
-<h4 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h4><p>​    使用多个专一功能的接口比使用一个的总接口总要好（因为某些实现类可能只需要部分功能，但实现总接口时却必须重写全部的功能）。<br>    优点：会使一个软件系统功能扩展时，修改的压力不会传到别的对象那里<br>        1、利用委托分离接口。<br>        2、利用多继承分离接口。</p>
-<h4 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h4><p>​    对象与对象之间应该使用尽可能少的方法来关联，避免千丝万缕的关系（不然会导致程序的高耦合）控制信息的过载，在将其运用到系统设计中应注意以下几点：<br>    1.在类的划分上，应当创建有弱耦合的类。类之间的耦合越弱，就越有利于复用；<br>    2.在类的结构设计上，每一个类都应当尽量降低成员的访问权限。一个类不应当public自己的属性，而应当提供取值和赋值的方法让外界间接访问自己的属性。<br>    3.在类的设计上，只要有可能，一个类应当设计成不变类。（安全）</p>
-<p>​    4.在对其它对象的引用上，一个类对其它对象的引用应该降到最低（不太懂这是什么意思，待了解）</p>
-<h4 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h4><p>​    对扩展开放，对修改关闭。<br>    优点：按照OCP原则设计出来的系统，降低了程序各部分之间的耦合性，其适应性、灵活性、稳定性都比较好。当已有软件系统需要增加新的功能时，不需要对作为系统基础的抽象层进行修改，只需要在原有基础上附加新的模块就能实现所需要添加的功能。增加的新模块对原有的模块完全没有影响或影响很小，这样就无须为原有模块进行重新测试。<br>    实现规则：在面向对象设计中，不允许更改的是系统的抽象层，而允许扩展的是系统的实现层。定义一个一劳永逸的抽象设计层，允许尽可能多的行为在实现层被实现。解决问题关键在于抽象化，抽象化是面向对象设计的第一个核心本质。<br>    在面向对象编程中，通过抽象类及接口，规定了具体类的特征作为抽象层，相对稳定，不需更改，从而满足“对修改关闭”；而从抽象类导出的具体类可以改变系统的行为，从而满足“对扩展开放”。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-算法分析与记录" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/17/算法分析与记录/" class="article-date">
-  	<time datetime="2018-04-17T14:17:47.032Z" itemprop="datePublished">2018-04-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/算法分析与记录/">
-        算法分析与记录
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">冒泡排序：比较相邻的元素。比较谁大谁小然后交换他们两个</span></span><br><span class="line"><span class="comment">	（对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buddleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">	 <span class="keyword">int</span> n = array.length;</span><br><span class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i &lt; n;i++)&#123;</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j =i+<span class="number">1</span>;j &lt; n;j++)&#123;</span><br><span class="line">			 <span class="keyword">if</span>(array[j] &lt; array[i])&#123;</span><br><span class="line">				 <span class="keyword">int</span> temp = array[j];</span><br><span class="line">				 array[j] = array[i];</span><br><span class="line">				 array[i] = temp;</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">选择排序:在一次遍历过程中找到最小元素的角标位置，然后把它放到数组的首端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> n = array.length;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//交换辅助字段</span></span><br><span class="line">		<span class="keyword">int</span> temp;</span><br><span class="line">		<span class="comment">//记录目前比较最小的位置</span></span><br><span class="line">		<span class="keyword">int</span> minPosition;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n;i++)&#123;</span><br><span class="line">			<span class="comment">//比较开始时，假设i为最小的位置</span></span><br><span class="line">			minPosition = i;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j =i+<span class="number">1</span>;j &lt; n;j++)&#123;</span><br><span class="line">				<span class="comment">//如果第j个比 minPosition位置上的小，则更新当前最小数的位置</span></span><br><span class="line">				<span class="keyword">if</span>( array[j] &lt; array[minPosition])&#123;</span><br><span class="line">					minPosition = j;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//内循环结束后，交换位置</span></span><br><span class="line">			temp = array[minPosition];</span><br><span class="line">			array[minPosition] = array[i];</span><br><span class="line">			array[i] = temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">插入排序：从第一个元素开始，该元素可以认为已经被排序，</span></span><br><span class="line"><span class="comment">取出下一个元素，在已经排序的元素序列中从后向前扫描,</span></span><br><span class="line"><span class="comment">在适合的位置放置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">	 <span class="keyword">int</span> n = array.length;</span><br><span class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i&lt;n;i++)&#123;</span><br><span class="line">		 <span class="comment">//向前扫描</span></span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j =i; j&gt;<span class="number">0</span>;j--)&#123;</span><br><span class="line">			 <span class="comment">//当前的比前一个元素要小，则交换位置</span></span><br><span class="line">			 <span class="keyword">if</span>(array[j] &lt; array[j-<span class="number">1</span>])&#123;</span><br><span class="line">				 <span class="keyword">int</span> temp = array[j-<span class="number">1</span>];</span><br><span class="line">				 array[j-<span class="number">1</span>] = array[j];</span><br><span class="line">				 array[j] = temp;</span><br><span class="line">			 &#125;</span><br><span class="line">			 </span><br><span class="line">		 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Android之CoordinatorLayout的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/17/Android之CoordinatorLayout的使用/" class="article-date">
-  	<time datetime="2018-04-17T14:14:38.826Z" itemprop="datePublished">2018-04-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/Android之CoordinatorLayout的使用/">
-        Android之CoordinatorLayout的简单使用
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- CoordinatorLayout把整个页面分成了两个部分，上半部分固定设置为AppBarLayout布局，上半部分的作用就是可以进行折叠; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 下半部分可以为两种布局之一:RecyclerView 和 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- NestedScrollView，下半部分的作用是可以进行滑动，对上部分进行折叠操作 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- CoordinatorLayout可以结合不同的控件，实现不同的结果。 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 目前展示的为结合为toolbar的展示效果 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- xml中的布局如下 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.CoordinatorLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">tools:context</span>=<span class="string">"com.example.administrator.dragtest.SevenActivity"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 头部内容 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">android.support.design.widget.AppBarLayout</span> //继承与<span class="attr">LinearLayout</span>的，默认 的 方向 是<span class="attr">Vertical</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">app:contentScrim</span>=<span class="string">"@color/colorPrimary"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:gravity</span>=<span class="string">"bottom"</span></span></span><br><span class="line"><span class="tag">    &gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 可替换其他的容器(一般为CollapsingToolbarLayout，由于项目中需要改为LinearLayout,把其替换为ToolbarLayout即可) --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">LinearLayout</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/toolbar"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"80dp"</span></span></span><br><span class="line">		 &lt;!-- 该属性为折叠后title位于容器内的位置 --&gt;</span><br><span class="line">        app:collapsedTitleGravity="bottom"</span><br><span class="line">		<span class="comment">&lt;!-- 折叠后容器显示的颜色 --&gt;</span></span><br><span class="line">		app:contentScrim="@color/colorPrimary"</span><br><span class="line">		 </span><br><span class="line">		<span class="comment">&lt;!-- app:layout_scrollFlags:设置上半部分滑动的方式: --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 1.scroll:必须设置，表示可折叠 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 2.enterAlways:表示底部的滚动控件只要向下滚动，头部就显示出来 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 3.enterAlwaysCollapsed:表示当底部滚动控件滚动见顶时，头部显示出来 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 4.exitUntilCollapsed:表示头部折叠到最小高度时（Toolbar的高度），就不再折叠 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 5.snap 表示在滑动过程中如果停止滑动 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 则头部会就近折叠（要么恢复原状，要么折叠成一个Toolbar） --&gt;</span></span><br><span class="line">		</span><br><span class="line">        app:layout_scrollFlags="scroll|enterAlwaysCollapsed"</span><br><span class="line">		 <span class="comment">&lt;!-- 显示的文字，可以跟着滑动来改变size(toolbar中使用) --&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- app:title="coordinatorlayout" --&gt;</span></span><br><span class="line">        android:orientation="horizontal"</span><br><span class="line">        &gt;</span><br><span class="line">        <span class="tag">&lt;<span class="name">ImageView</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:background</span>=<span class="string">"@mipmap/ic_launcher"</span></span></span><br><span class="line"><span class="tag">            /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:text</span>=<span class="string">"12345213123"</span></span></span><br><span class="line"><span class="tag">        /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.AppBarLayout</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/recycler_view"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line">		&lt;!-- 滚动控件必须设置该属性 --&gt;</span><br><span class="line">        app:layout_behavior="@string/appbar_scrolling_view_behavior"</span><br><span class="line">        &gt;</span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">android.support.v7.widget.RecyclerView</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.CoordinatorLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
       
     </div>

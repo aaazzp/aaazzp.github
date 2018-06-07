@@ -169,6 +169,180 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-程序设计的六大原则" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/17/程序设计的六大原则/" class="article-date">
+  	<time datetime="2018-04-17T14:27:39.836Z" itemprop="datePublished">2018-04-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/17/程序设计的六大原则/">
+        程序设计的六大原则
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="单一职责原则（只有一个功能）"><a href="#单一职责原则（只有一个功能）" class="headerlink" title="单一职责原则（只有一个功能）"></a>单一职责原则（只有一个功能）</h4><p>​    对于一个类而言，只专注做一件事和仅有一个引起它变化的原因。<br>    个人理解：专注做一件事，即该类为只提供一个功能，仅有一个引起变化的原因，即为只有调用其提供的单一功能，才会引起它的变化。</p>
+<p>优点：消除耦合，减小因需求变化引起代码僵化。</p>
+<p>（个人认为）缺点：造成编写过多的类。</p>
+<p>（个人认为）如编写的各种工具类，实现的是某一方面的单一功能。</p>
+<h4 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h4><p>​    子类必须能够替换它们的父类（基类型）。如果一个软件实体使用的是基类，那么当把这个基类<br>替换为其子类，程序的行为不会发生任何变化。<br>    优点：很容易的实现同一父类下各个子类的互换，而客户端可以毫不察觉（即不会造成其他的影响）。（个人认为）如：android中继承与ViewGroup的子类（LinearLayout,RelativeLayout),均可作为控件的容器。</p>
+<h4 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h4><p>​    实现依赖于抽象，而不依赖于具体；抽象不应当依赖于细节；细节应当依赖于抽象；针对接口编程，不针对实现编程。<br>    （个人认为）总的来说，是先把程序需要完成的功能，利用接口抽象统一规范，具体实现时根据接口的规范去编程，以及实现细节。<br>    优点：依赖倒置原则使细节和策略都依赖于抽象，抽象的稳定性决定了系统的稳定性<br>    缺点：在抽象层次上的耦合虽然有灵活性，但也带来了额外的复杂性，<br>        如果一个具体类发生变化的可能性非常小（个人认为：问题是，该如何判断某一个类变化的可能性？因为项目中有太多的变化），那么抽象耦合能发挥的好处便十分有限（个人认为，因为变化小的具体类，直接具体编写完整的实现会更为清晰），这时可以用具体耦合反而会更好。<br>    层次化：所有结构良好的面向对象构架都具有清晰的层次定义，每个层次通过一个定义良好的、受控的接口向外提供一组内聚的服务。<br>    依赖于抽象：建议不依赖于具体类，即程序中所有的依赖关系都应该终止于抽象类或者接口。尽量做到：<br>            1.任何变量都不该持有一个指向具体类的指针或引用（避免变化时，需逐一修改）；<br>            2.任何类都不该从具体类派生（因为java中类为单继承）<br>            3.任何方法都不应该复写它的任何基类中已经实现的方法（不然会造成重复代码）。</p>
+<h4 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h4><p>​    使用多个专一功能的接口比使用一个的总接口总要好（因为某些实现类可能只需要部分功能，但实现总接口时却必须重写全部的功能）。<br>    优点：会使一个软件系统功能扩展时，修改的压力不会传到别的对象那里<br>        1、利用委托分离接口。<br>        2、利用多继承分离接口。</p>
+<h4 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h4><p>​    对象与对象之间应该使用尽可能少的方法来关联，避免千丝万缕的关系（不然会导致程序的高耦合）控制信息的过载，在将其运用到系统设计中应注意以下几点：<br>    1.在类的划分上，应当创建有弱耦合的类。类之间的耦合越弱，就越有利于复用；<br>    2.在类的结构设计上，每一个类都应当尽量降低成员的访问权限。一个类不应当public自己的属性，而应当提供取值和赋值的方法让外界间接访问自己的属性。<br>    3.在类的设计上，只要有可能，一个类应当设计成不变类。（安全）</p>
+<p>​    4.在对其它对象的引用上，一个类对其它对象的引用应该降到最低（不太懂这是什么意思，待了解）</p>
+<h4 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h4><p>​    对扩展开放，对修改关闭。<br>    优点：按照OCP原则设计出来的系统，降低了程序各部分之间的耦合性，其适应性、灵活性、稳定性都比较好。当已有软件系统需要增加新的功能时，不需要对作为系统基础的抽象层进行修改，只需要在原有基础上附加新的模块就能实现所需要添加的功能。增加的新模块对原有的模块完全没有影响或影响很小，这样就无须为原有模块进行重新测试。<br>    实现规则：在面向对象设计中，不允许更改的是系统的抽象层，而允许扩展的是系统的实现层。定义一个一劳永逸的抽象设计层，允许尽可能多的行为在实现层被实现。解决问题关键在于抽象化，抽象化是面向对象设计的第一个核心本质。<br>    在面向对象编程中，通过抽象类及接口，规定了具体类的特征作为抽象层，相对稳定，不需更改，从而满足“对修改关闭”；而从抽象类导出的具体类可以改变系统的行为，从而满足“对扩展开放”。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-算法分析与记录" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/17/算法分析与记录/" class="article-date">
+  	<time datetime="2018-04-17T14:17:47.032Z" itemprop="datePublished">2018-04-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/17/算法分析与记录/">
+        算法分析与记录
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">冒泡排序：比较相邻的元素。比较谁大谁小然后交换他们两个</span></span><br><span class="line"><span class="comment">	（对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buddleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">	 <span class="keyword">int</span> n = array.length;</span><br><span class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i &lt; n;i++)&#123;</span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j =i+<span class="number">1</span>;j &lt; n;j++)&#123;</span><br><span class="line">			 <span class="keyword">if</span>(array[j] &lt; array[i])&#123;</span><br><span class="line">				 <span class="keyword">int</span> temp = array[j];</span><br><span class="line">				 array[j] = array[i];</span><br><span class="line">				 array[i] = temp;</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">选择排序:在一次遍历过程中找到最小元素的角标位置，然后把它放到数组的首端</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> n = array.length;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//交换辅助字段</span></span><br><span class="line">		<span class="keyword">int</span> temp;</span><br><span class="line">		<span class="comment">//记录目前比较最小的位置</span></span><br><span class="line">		<span class="keyword">int</span> minPosition;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n;i++)&#123;</span><br><span class="line">			<span class="comment">//比较开始时，假设i为最小的位置</span></span><br><span class="line">			minPosition = i;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j =i+<span class="number">1</span>;j &lt; n;j++)&#123;</span><br><span class="line">				<span class="comment">//如果第j个比 minPosition位置上的小，则更新当前最小数的位置</span></span><br><span class="line">				<span class="keyword">if</span>( array[j] &lt; array[minPosition])&#123;</span><br><span class="line">					minPosition = j;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//内循环结束后，交换位置</span></span><br><span class="line">			temp = array[minPosition];</span><br><span class="line">			array[minPosition] = array[i];</span><br><span class="line">			array[i] = temp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">插入排序：从第一个元素开始，该元素可以认为已经被排序，</span></span><br><span class="line"><span class="comment">取出下一个元素，在已经排序的元素序列中从后向前扫描,</span></span><br><span class="line"><span class="comment">在适合的位置放置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">	 <span class="keyword">int</span> n = array.length;</span><br><span class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i&lt;n;i++)&#123;</span><br><span class="line">		 <span class="comment">//向前扫描</span></span><br><span class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j =i; j&gt;<span class="number">0</span>;j--)&#123;</span><br><span class="line">			 <span class="comment">//当前的比前一个元素要小，则交换位置</span></span><br><span class="line">			 <span class="keyword">if</span>(array[j] &lt; array[j-<span class="number">1</span>])&#123;</span><br><span class="line">				 <span class="keyword">int</span> temp = array[j-<span class="number">1</span>];</span><br><span class="line">				 array[j-<span class="number">1</span>] = array[j];</span><br><span class="line">				 array[j] = temp;</span><br><span class="line">			 &#125;</span><br><span class="line">			 </span><br><span class="line">		 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Android之CoordinatorLayout的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/17/Android之CoordinatorLayout的使用/" class="article-date">
+  	<time datetime="2018-04-17T14:14:38.826Z" itemprop="datePublished">2018-04-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/17/Android之CoordinatorLayout的使用/">
+        Android之CoordinatorLayout的简单使用
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- CoordinatorLayout把整个页面分成了两个部分，上半部分固定设置为AppBarLayout布局，上半部分的作用就是可以进行折叠; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 下半部分可以为两种布局之一:RecyclerView 和 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- NestedScrollView，下半部分的作用是可以进行滑动，对上部分进行折叠操作 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- CoordinatorLayout可以结合不同的控件，实现不同的结果。 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 目前展示的为结合为toolbar的展示效果 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- xml中的布局如下 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.CoordinatorLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:tools</span>=<span class="string">"http://schemas.android.com/tools"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">tools:context</span>=<span class="string">"com.example.administrator.dragtest.SevenActivity"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 头部内容 --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">android.support.design.widget.AppBarLayout</span> //继承与<span class="attr">LinearLayout</span>的，默认 的 方向 是<span class="attr">Vertical</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">app:contentScrim</span>=<span class="string">"@color/colorPrimary"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:gravity</span>=<span class="string">"bottom"</span></span></span><br><span class="line"><span class="tag">    &gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- 可替换其他的容器(一般为CollapsingToolbarLayout，由于项目中需要改为LinearLayout,把其替换为ToolbarLayout即可) --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">LinearLayout</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/toolbar"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"80dp"</span></span></span><br><span class="line">		 &lt;!-- 该属性为折叠后title位于容器内的位置 --&gt;</span><br><span class="line">        app:collapsedTitleGravity="bottom"</span><br><span class="line">		<span class="comment">&lt;!-- 折叠后容器显示的颜色 --&gt;</span></span><br><span class="line">		app:contentScrim="@color/colorPrimary"</span><br><span class="line">		 </span><br><span class="line">		<span class="comment">&lt;!-- app:layout_scrollFlags:设置上半部分滑动的方式: --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 1.scroll:必须设置，表示可折叠 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 2.enterAlways:表示底部的滚动控件只要向下滚动，头部就显示出来 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 3.enterAlwaysCollapsed:表示当底部滚动控件滚动见顶时，头部显示出来 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 4.exitUntilCollapsed:表示头部折叠到最小高度时（Toolbar的高度），就不再折叠 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 5.snap 表示在滑动过程中如果停止滑动 --&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 则头部会就近折叠（要么恢复原状，要么折叠成一个Toolbar） --&gt;</span></span><br><span class="line">		</span><br><span class="line">        app:layout_scrollFlags="scroll|enterAlwaysCollapsed"</span><br><span class="line">		 <span class="comment">&lt;!-- 显示的文字，可以跟着滑动来改变size(toolbar中使用) --&gt;</span></span><br><span class="line">         <span class="comment">&lt;!-- app:title="coordinatorlayout" --&gt;</span></span><br><span class="line">        android:orientation="horizontal"</span><br><span class="line">        &gt;</span><br><span class="line">        <span class="tag">&lt;<span class="name">ImageView</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">            <span class="attr">android:background</span>=<span class="string">"@mipmap/ic_launcher"</span></span></span><br><span class="line"><span class="tag">            /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TextView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:text</span>=<span class="string">"12345213123"</span></span></span><br><span class="line"><span class="tag">        /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.AppBarLayout</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:id</span>=<span class="string">"@+id/recycler_view"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line">		&lt;!-- 滚动控件必须设置该属性 --&gt;</span><br><span class="line">        app:layout_behavior="@string/appbar_scrolling_view_behavior"</span><br><span class="line">        &gt;</span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">android.support.v7.widget.RecyclerView</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">android.support.design.widget.CoordinatorLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Android之数据保存" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
