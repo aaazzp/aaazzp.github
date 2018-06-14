@@ -169,6 +169,463 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Java知识点：注解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/14/Java知识点：注解/" class="article-date">
+  	<time datetime="2018-06-14T13:44:20.729Z" itemprop="datePublished">2018-06-14</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/14/Java知识点：注解/">
+        Java知识点：注解
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    注解，是一种在代码中添加信息提供的一种形式化的方法，使我们可以在稍后的某个时刻方便地使用这些数据。Java中提供了三种标注注解和四种元注解（负责注解其他的注解）。</p>
+<h5 id="标准注解"><a href="#标准注解" class="headerlink" title="标准注解"></a>标准注解</h5><ol>
+<li>@Override:当前方法定义将覆盖超类中的方法。</li>
+<li>@Deprecated:表明当使用了注解为元素，编译器会发出警告信息。</li>
+<li>@SuppressWarnings:关闭不当的编译器警告信息。</li>
+</ol>
+<h5 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h5><ol>
+<li>@Target:表示该注解可以用于什么地方，可选参数有：CONSTRUCTOR(构造器的声明)、FIELD(域声明)、LOCAL_VARIABLE(局部变量声明)、METHOD(方法声明)、PACKAGE(包声明)、PARAMETER(参数声明)、TYPE(类、接口或enum声明)。</li>
+<li>@Retention:表示需要在什么级别保存该注解信息。可选有：SOURCE(注解将被编译器丢弃)、CLASS(注解在class文件中可用，但会被VM丢弃)、RUNTIME(VM在运行期也保留注解，因此可以通过反射机制读取注解信息)。</li>
+<li>@Documented:将此注解包含在javadoc中</li>
+<li>@Inherited:允许子类继承父类中的注解。</li>
+</ol>
+<h5 id="定义注解"><a href="#定义注解" class="headerlink" title="定义注解"></a>定义注解</h5><p>​    注解也会被编译成class文件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Notation&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">id</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">descrition</span><span class="params">()</span> <span class="keyword">default</span> "<span class="keyword">this</span> is <span class="keyword">default</span> value"</span>;</span><br><span class="line">    <span class="comment">//defalut为没有传入声明字符串的默认值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="编写注解处理器"><a href="#编写注解处理器" class="headerlink" title="编写注解处理器"></a>编写注解处理器</h5><p>​    编写Notation注解处理器如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NotationTracker</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="title">void</span> <span class="params">(List&lt;Integer&gt; notations,Class&lt;?&gt; cl)</span></span>&#123;</span><br><span class="line">        <span class="comment">//getDeclareMethods方法与getAnnotation方法均属于AnnotatedElement接口</span></span><br><span class="line">        <span class="keyword">for</span>(Method m : cl.getDeclareMethods)&#123;</span><br><span class="line">            </span><br><span class="line">            Notation n = m.getAnnotation(Notation.class);<span class="comment">//返回指定类型的注解对象</span></span><br><span class="line">            <span class="keyword">if</span>(n != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="comment">//print...</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i : notations)&#123;</span><br><span class="line">            <span class="comment">//print</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="注解元素"><a href="#注解元素" class="headerlink" title="注解元素"></a>注解元素</h5><p>​    注解元素可用的类型可包括：所有的基本类型，String，Class，enum，Anotation以及以上类型的数组。</p>
+<h5 id="默认值限制"><a href="#默认值限制" class="headerlink" title="默认值限制"></a>默认值限制</h5><p>​    注解要么具有默认值，要么在使用注解时提供元素的值。</p>
+<h5 id="基于注解的单元测试"><a href="#基于注解的单元测试" class="headerlink" title="基于注解的单元测试"></a>基于注解的单元测试</h5><p>​    单元测试是对类中的每个方法提供一个或多个测试的一种实践。这种基于注解的测试框架叫做@Unit。其中，使用最基本的一个注解为@Test。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Android线程与线程池" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/11/Android线程与线程池/" class="article-date">
+  	<time datetime="2018-06-11T09:19:20.182Z" itemprop="datePublished">2018-06-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/11/Android线程与线程池/">
+        Android线程与线程池
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    在Android中，线程在用途上分为主线程与子线程，主线程主要处理和界面相关的事情，而子线程则用于执行耗时操作。</p>
+<p>​    在Android中，除Thread外，AsyncTask（底层用到了线程池）、IntentService（底层用了线程），HandlerThread（底层用了线程）也是一种线程。</p>
+<p>​    由于线程是一种受限的系统资源，所以频繁地对其进行创建与销毁，会造成比较大的开销，正确的做法应该是采用线程池，在线程池中会缓存一定数量的线程，通过线程池就可以避免因为频繁创建和销毁线程所带来的系统开销。</p>
+<p>​    Android中的线程池来源于Java，只要是通过Executor来派生特定类型的线程池。</p>
+<h4 id="主线程和子线程"><a href="#主线程和子线程" class="headerlink" title="主线程和子线程"></a>主线程和子线程</h4><p>​    主线程是指进程所拥有的进程，在Java中默认情况下一个进程只有一个线程（主线程）。主线程主要处理界面交互相关的逻辑，因为交互是随时进行的，所以主线程在任何时候都必须有较高的响应速度。因此，在主线程中就不能执行耗时的操作，只能交由子线程执行。</p>
+<p>​    Android中同理。其中，主线程是指UI线程，其作用是运行四大组件以及处理它们与用户的交互。耗时操作不能在主线程中执行，否则会被阻塞出现ANR现象。</p>
+<h4 id="Android中的线程形态"><a href="#Android中的线程形态" class="headerlink" title="Android中的线程形态"></a>Android中的线程形态</h4><h5 id="AsyncTask"><a href="#AsyncTask" class="headerlink" title="AsyncTask"></a>AsyncTask</h5><p>​    它是一种轻量级的异步任务类，可以在线程池中执行后台任务，然后把进度和结果传递给主线程并在主线程中更新UI。它封装了Thread和Handler。通过它可以更方便地执行后台任务以及在主线程中访问UI，但并不适合进行特别耗时的后台任务。</p>
+<p>​    AsyncTask是一个抽象的泛型类，提供了Params：表示参数类型、Progress：表示后台任务的执行速度的类型、Result：表示后台任务的返回结果类型，三个泛型参数，如果不需要传递具体的参数，可以用Void来代替。</p>
+<p>​    AsyncTask提供了4个核心方法：</p>
+<p>​    1.onPreExecute()：在主线程中执行，在异步任务执行之前，此方法会被调用，一般用于做一些准备工作。</p>
+<p>​    2.doInBackground(Params…params)：在线程池中执行，用于执行异步任务，params表示异步任务输入的参数，在此方法中可以通过调用publishProgress方法来更新任务的进度，publishProgress方法会调用onProgressUpdate方法。此方法需要返回结果给onPostExecute方法。</p>
+<p>​    3.onProgressUpdate(Progress…values)：在主线程中执行，当后台任务的执行进度发生改变时，此方法会被调用。</p>
+<p>​    4.onPostExecute(Result result)：在主线程中执行，在异步任务执行之后，此方法会被调用。</p>
+<p>​    此外，还提供了一个onCancelled()方法，在主线程中执行，当异步任务被取消时，该方法会被调用。</p>
+<h5 id="HandlerThread"><a href="#HandlerThread" class="headerlink" title="HandlerThread"></a>HandlerThread</h5><p>​    它继承了Thread，是一种可以使用Handler的Thread，它的实现就是在run方法中，通过Looper.prepare()来创建消息队列，并通过Looper.loop()来开启消息循环。</p>
+<h5 id="IntentService"><a href="#IntentService" class="headerlink" title="IntentService"></a>IntentService</h5><p>​    它是一种特许的service，它是一个抽象类且继承于Service，因此，必须创建它的子类才能使用它。它可用于执行后台耗时的任务，当任务执行后它会自动停止。</p>
+<p>​    因为它是服务的原因，所以它的优先级比单纯的线程要高，所以比较适合执行一些高优先级的后台任务，且不容易被系统杀死。</p>
+<h4 id="Android中的线程池"><a href="#Android中的线程池" class="headerlink" title="Android中的线程池"></a>Android中的线程池</h4><p>​    线程池的优点有：</p>
+<ul>
+<li>重用线程池中的线程，避免因为线程的创建和销毁所带来的性能开销。</li>
+<li>能有效控制线程池的最大并发数，避免因为大量的线程之间因互相抢占系统资源而导致阻塞现象。</li>
+<li>能够对线程进行简单的管理，并提供定时执行以及指定间隔循环执行等功能。</li>
+</ul>
+<h5 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h5><p>​    Android中的线程池都是直接或间接通过配置ThreadPoolExecutor来实现的。</p>
+<p>​    它的常用构造方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="corePoolSize-线程池的核心线程数，默认情况下，核心线程会在线程池中一直存活，即使它们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut-属性设置为true，闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔有keepAliveTime指定，当超过该时间后，核心线程会被终止。"><a href="#corePoolSize-线程池的核心线程数，默认情况下，核心线程会在线程池中一直存活，即使它们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut-属性设置为true，闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔有keepAliveTime指定，当超过该时间后，核心线程会被终止。" class="headerlink" title="corePoolSize:线程池的核心线程数，默认情况下，核心线程会在线程池中一直存活，即使它们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut()属性设置为true，闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔有keepAliveTime指定，当超过该时间后，核心线程会被终止。"></a>corePoolSize:线程池的核心线程数，默认情况下，核心线程会在线程池中一直存活，即使它们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut()属性设置为true，闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔有keepAliveTime指定，当超过该时间后，核心线程会被终止。</h5><h5 id="maximumPoolSize-线程池所能容纳的最大线程数，当活动线程数达到这个数目后，后续的新任务会被阻塞。"><a href="#maximumPoolSize-线程池所能容纳的最大线程数，当活动线程数达到这个数目后，后续的新任务会被阻塞。" class="headerlink" title="maximumPoolSize:线程池所能容纳的最大线程数，当活动线程数达到这个数目后，后续的新任务会被阻塞。"></a>maximumPoolSize:线程池所能容纳的最大线程数，当活动线程数达到这个数目后，后续的新任务会被阻塞。</h5><h5 id="keepAliveTime-非核心线程闲置时的超时时长，超过该时长后，非核心线程会被回收。"><a href="#keepAliveTime-非核心线程闲置时的超时时长，超过该时长后，非核心线程会被回收。" class="headerlink" title="keepAliveTime:非核心线程闲置时的超时时长，超过该时长后，非核心线程会被回收。"></a>keepAliveTime:非核心线程闲置时的超时时长，超过该时长后，非核心线程会被回收。</h5><h5 id="unit：用于指定keepAliveTime参数的时间单位，这是一个枚举，常用的有TimeUnit-MILLISECONDS-毫秒-，TimeUnit-SECONDS-秒-，TimeUnit-MINUTES（分钟）。"><a href="#unit：用于指定keepAliveTime参数的时间单位，这是一个枚举，常用的有TimeUnit-MILLISECONDS-毫秒-，TimeUnit-SECONDS-秒-，TimeUnit-MINUTES（分钟）。" class="headerlink" title="unit：用于指定keepAliveTime参数的时间单位，这是一个枚举，常用的有TimeUnit.MILLISECONDS(毫秒)，TimeUnit.SECONDS(秒)，TimeUnit.MINUTES（分钟）。"></a>unit：用于指定keepAliveTime参数的时间单位，这是一个枚举，常用的有TimeUnit.MILLISECONDS(毫秒)，TimeUnit.SECONDS(秒)，TimeUnit.MINUTES（分钟）。</h5><h5 id="workQueue-线程池中的任务队列，通过线程池的execute方法提供的Runnable对象会存储在这个参数中。"><a href="#workQueue-线程池中的任务队列，通过线程池的execute方法提供的Runnable对象会存储在这个参数中。" class="headerlink" title="workQueue:线程池中的任务队列，通过线程池的execute方法提供的Runnable对象会存储在这个参数中。"></a>workQueue:线程池中的任务队列，通过线程池的execute方法提供的Runnable对象会存储在这个参数中。</h5><h5 id="theradFactory：线程工厂，为线程池提供创建新线程的功能。它是一个接口，只有一个方法，Thread-newThread-Runnable-r-。"><a href="#theradFactory：线程工厂，为线程池提供创建新线程的功能。它是一个接口，只有一个方法，Thread-newThread-Runnable-r-。" class="headerlink" title="theradFactory：线程工厂，为线程池提供创建新线程的功能。它是一个接口，只有一个方法，Thread newThread(Runnable r)。"></a>theradFactory：线程工厂，为线程池提供创建新线程的功能。它是一个接口，只有一个方法，Thread newThread(Runnable r)。</h5><p>​    除了这些主要的参数外，threadPoolExecutor还提供了一个不常用的参数RejectedExecutionHandler handler。当线程池无法执行新任务的时候，threaddPoolExecutor会调用handler的rejectedExecution方法来通知调用者。</p>
+<h4 id="ThreadPoolExecutor执行任务时遵循以下规则："><a href="#ThreadPoolExecutor执行任务时遵循以下规则：" class="headerlink" title="ThreadPoolExecutor执行任务时遵循以下规则："></a>ThreadPoolExecutor执行任务时遵循以下规则：</h4><ul>
+<li>如果线程池中的线程数量未达到核心线程的数量，那么会直接启动一个核心线程来执行任务。</li>
+<li>如果线程池中的线程数量已经达到或者超过了核心线程数，那么任务会被参入到任务队列中排队等待执行。</li>
+<li>如果在上面的步骤中无法将任务插入到任务队列中，一般是因为任务队列已满，这时，如果线程数量未达到线程池规定的最大值，那么会立刻启动一个非核心线程来执行任务。</li>
+<li>如果上述步骤中，已经到达线程池中的最大值，会调用RejectedExecutionHandle的rejectedExecution方法通知调用者。</li>
+</ul>
+<h4 id="线程池的分类"><a href="#线程池的分类" class="headerlink" title="线程池的分类"></a>线程池的分类</h4><ul>
+<li>FixedThreadPool：通过Executors的newFixedThreadPool方法来创建。是一种线程数量固定的线程池，当线程处于空闲时，它们并不会被回收，除非线程池被关闭。由于它只有核心线程并且这些核心线程不会被回收，所以它能够更加快速的响应外界的请求。实现如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+<ul>
+<li>CachedThreadPool：通过Executors的newCachedThreadPool方法来创建。它是一种线程数量不定的线程池。它只有非核心线程，其最大的核心线程数为Integer.MAX_VALUE。它的任务队列相当于一个空集合，所以任何的任务都会被立刻执行。</li>
+<li>ScheduledThreadPool：通过Executors的newScheduledThreadPool方法来创建。它的核心线程数是固定的，但非核心线程没有限制，并且当非核心线程闲置时会被立即回收，这类的线程池主要用于执行定时任务和具有固定周期的重复任务。</li>
+<li>SingleThreadExecutor：通过Executors的newSingleThreadExecutor方法来创建。这类线程池只有一个核心线程，它确保所有的任务都在同一个线程中按顺序执行。它的意义在于统一所有的外界任务到一个线程中，使得这些任务之间不用处理线程同步的问题。</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Android之ViewPager的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/08/Android之ViewPager的使用/" class="article-date">
+  	<time datetime="2018-06-08T13:53:01.047Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/Android之ViewPager的使用/">
+        Android之ViewPager的使用
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    ViewPager类需要一个适配器为其提供数据，一般与Fragment合用，需要用到FragmentPagerAdapter和FragmentStatePagerAdapter。</p>
+<h4 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h4><p>​    通过继承PagerAdapter，实现自己的适配器，如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPagerAdapter</span> <span class="title">extend</span> <span class="title">PagerAdapter</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> List&lt;View&gt; mList;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyPagerAdapter</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//重写以下方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//返回页面个数</span></span><br><span class="line">        <span class="keyword">return</span> mList.size();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isViewFromObject</span><span class="params">(View view,Object object)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> view == object;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line">        contaner.add(mList.get(position));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(ViewGroup container,<span class="keyword">int</span> position,Object object)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">        container.removeView((View) object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//若界面是fragment，即继承自FragmentPagerAdapter，重写方法即可，与PagerAdapter类似。</span></span><br></pre></td></tr></table></figure>
+<p>​    </p>
+<p>​    在ViewPager中，可以用notifyDataSetChanged()方法对数据进行更新。在PagerAdapter的刷新过程中，每次都会调用notifyDataSetChanged()时，都会调用getItemPostion(Object object)方法，该方法会遍历所有的Item，并且为每一个Item返回一个状态值（POSITION_NONE/POSITION_UNCHANGED），如果返回值为第一个，那么Item会被destroyItem方法移除，然后重新加载，如果是第二个，则不会重新加载，默认情况下应该返回第二个。</p>
+<p>​    若需要在ViewPager中更新数据，则需要重写getItemPosition(Object object)方法。</p>
+<h4 id="实现更新的方法"><a href="#实现更新的方法" class="headerlink" title="实现更新的方法"></a>实现更新的方法</h4><ol>
+<li>直接将<code>getItemPosition(Object object)</code> 的返回值设置为默认的POSITION_UNCHANGE 更改为POSITION_NONE。（这样就会遍历所有的Item，并且destory 所有的item，并且更新全部）。</li>
+<li>在PagerAdapter 定义int 型全局变量（意味着需要更新的Item Positon），然后在Adapter中新增函数<code>refresh()</code>，<code>在refresh()</code>函数中首先更新定义的int型全局变量，指明需要更新的item，然后在<code>getItemPosition(Ojbect object)</code> 获取遍历到object Position与需要更新的Item 位置进行比较（利用函数getItemPositon(object)），如果相同的话，返回POSITAION_NONE，这样就可以实现对特定位置的Item进行更新。</li>
+</ol>
+<h4 id="指示器"><a href="#指示器" class="headerlink" title="指示器"></a>指示器</h4><p>​    可以使用TabLayout，为ViewPager加入指示器，然后调用tabLayout的setupWithViewPager(viewPager)方法设置即可。</p>
+<h4 id="实现轮播图"><a href="#实现轮播图" class="headerlink" title="实现轮播图"></a>实现轮播图</h4><p>​    可利用Timer和TimerTask实现定时更新ViewPager的页面。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Java知识点（二）：初始化与清理" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/08/Java知识点（二）：初始化与清理/" class="article-date">
+  	<time datetime="2018-06-08T09:15:53.316Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/Java知识点（二）：初始化与清理/">
+        Java知识点（二）：初始化与清理
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    初始化是指，在使用某个类对象时，必须将用到的数据初始化，不然在调用时，会报错；清理，即在对象使用完时，必须对其进行清理和回收，不然会导致内存耗光。</p>
+<h4 id="用构造器确保初始化"><a href="#用构造器确保初始化" class="headerlink" title="用构造器确保初始化"></a>用构造器确保初始化</h4><p>​    构造器采用与类相同的名称，可在该方法中进行一些必要参数的初始化，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​    在创建对象时，会为对象分配内存空间，并调用相应的构造器，这样就确保了在能操作对象之前，它已经被恰当地初始化了。</p>
+<p>​    如果没有指定构造器，编译器会自动创建一个无参的默认构造器。我们可以指定一些有参的构造器，去完成我们想要的初始化工作。</p>
+<h4 id="方法重载"><a href="#方法重载" class="headerlink" title="方法重载"></a>方法重载</h4><p>​    方法名相同，但参数类型或顺序不同的方法，成为方法重载。</p>
+<h4 id="方法重写"><a href="#方法重写" class="headerlink" title="方法重写"></a>方法重写</h4><p>​    </p>
+<h4 id="this关键字"><a href="#this关键字" class="headerlink" title="this关键字"></a>this关键字</h4><p>​    this关键字代表引用当前类中的成员变量或方法。</p>
+<h4 id="清理"><a href="#清理" class="headerlink" title="清理"></a>清理</h4><p>​    Java提供有垃圾回收机制，垃圾回收器会回收程序不再使用的内存。</p>
+<h4 id="可变参数列表"><a href="#可变参数列表" class="headerlink" title="可变参数列表"></a>可变参数列表</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(<span class="keyword">int</span>...num)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//该方法代表可传入任意int型的参数</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Android之Window与WindowManager" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/08/Android之Window与WindowManager/" class="article-date">
+  	<time datetime="2018-06-08T08:41:16.935Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/08/Android之Window与WindowManager/">
+        Android之Window与WindowManager
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h3><p>​    在Android中，window表示一个窗口的概念，在我们需要在桌面上显示一个类似于悬浮窗的效果时，就需要用到window来实现。</p>
+<p>​    window是一个抽象类，它的具体实现是phoneWindow。创建一个window，只需要通过windowManager即可完成；windowMnager是外界访问window的入口，window的具体实现位于，windowMangerService中，windowMangerService与windowManager的交互是一个ipc过程。Android中的所有视图都是通过window来呈现的，包括activity、dialog、toast，它们的视图实际上都是附加在window上，因此，window实际是view的管理者。</p>
+<p>​    通过windowMnager添加一个window的过程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mButton = <span class="keyword">new</span> Button(<span class="keyword">this</span>);</span><br><span class="line">mButton.setText(<span class="string">"button"</span>);</span><br><span class="line">mLp = <span class="keyword">new</span> WindowManager.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT,</span><br><span class="line">                                    <span class="number">0</span>,<span class="number">0</span>,PixelFormat.TRANSPARENT);</span><br><span class="line">mLp.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL</span><br><span class="line">|LayoutParams.FLAG_NOT_FOCUSABLE|LayoutParams.FLAG_SHOW_WHEN_LOCKED；</span><br><span class="line">mLp.gravity = Gravity.LEFT |Gravity.TOP;</span><br><span class="line">mLp.x = <span class="number">100</span>;</span><br><span class="line">mLp.y = <span class="number">300</span>;</span><br><span class="line">mWindowMnager.addView(mButton,mLp);</span><br><span class="line"></span><br><span class="line"><span class="comment">//以上为添加一个button到屏幕坐标为（100，300）的位置上。</span></span><br><span class="line"><span class="comment">//其中，Flags参数表示window的属性，具体属性意义查看文档。</span></span><br></pre></td></tr></table></figure>
+<h4 id="Window的类型"><a href="#Window的类型" class="headerlink" title="Window的类型"></a>Window的类型</h4><p>​    window的类型有三种，分别为应用window，对应一个acitivity、子window（不能单独存在，需要附属在特定的父window中，如Dialog就是一个子window）、系统window（需要声明权限才能创建的window，如Toast和系统状态栏）。</p>
+<p>​    window是分层的，每个window都有对应的z-ordered，层级大的会覆盖在层级小的window上面；其中应用window的层级范围是1~99，子window的层级范围为1000~1999，系统window的范围为2000~2999，这些层级范围对应着windowManager.LayoutParams的type参数。</p>
+<p>​    在使用系统window时，需声明权限：</p>
+<p>&lt;uses-permission android:name=”android.permission.SYSTEM_ALERT_WINDOW”/</p>
+<p>不然会报错。</p>
+<h3 id="WindowManger的功能"><a href="#WindowManger的功能" class="headerlink" title="WindowManger的功能"></a>WindowManger的功能</h3><p>​    常用的三个方法为，添加view：addView()、更新view：updateView()、删除view：removeView()。</p>
+<h3 id="Window的内部机制"><a href="#Window的内部机制" class="headerlink" title="Window的内部机制"></a>Window的内部机制</h3><p>​    每一个window都对应着一个View和一个ViewRootImpl，window与view通过ViewRootImpl建立联系。</p>
+<h4 id="window的添加过程"><a href="#window的添加过程" class="headerlink" title="window的添加过程"></a>window的添加过程</h4><p>​    通过windowManager的addView来实现，windowManager是一个接口，它的实现类为WindowManagerImpl。</p>
+<p>​    查看该类的源码可知，它的三大操作时交由windowManagerGlobal来处理的，它时以工厂的形式向外提供自己的实例。它的addView方法主要分为以下几步：</p>
+<h5 id="1-检查参数是否合法，如果是子window的话还需要调整一些布局参数"><a href="#1-检查参数是否合法，如果是子window的话还需要调整一些布局参数" class="headerlink" title="1.检查参数是否合法，如果是子window的话还需要调整一些布局参数"></a>1.检查参数是否合法，如果是子window的话还需要调整一些布局参数</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(view == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(display == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(!(params <span class="keyword">instanceof</span> WindowManager.LayoutParams))&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">final</span> WindowManager.LayoutParams wParams = (WindowManager.LayoutParams) params;</span><br><span class="line"><span class="keyword">if</span>(parentWindow != <span class="keyword">null</span>)&#123;</span><br><span class="line">    parentWindow.adjustLayoutParamsForSubWindow(wparams);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-创建ViewRootImpl并将View添加到列表中"><a href="#2-创建ViewRootImpl并将View添加到列表中" class="headerlink" title="2.创建ViewRootImpl并将View添加到列表中"></a>2.创建ViewRootImpl并将View添加到列表中</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root = <span class="keyword">new</span> ViewRoootImpl(view.getContext(),display);</span><br><span class="line">view.setLayoutParams(wparams);</span><br><span class="line"></span><br><span class="line"><span class="comment">//以下列表均为WindowManagerGlobal中的参数</span></span><br><span class="line">mViews.add(view);</span><br><span class="line">mRoots.add(root);</span><br><span class="line">mParams.add(wparams);</span><br></pre></td></tr></table></figure>
+<h5 id="3-通过ViewRootImpl来更新界面并完成添加过程"><a href="#3-通过ViewRootImpl来更新界面并完成添加过程" class="headerlink" title="3.通过ViewRootImpl来更新界面并完成添加过程"></a>3.通过ViewRootImpl来更新界面并完成添加过程</h5><p>​    该过程由ViewRootImpl的setView()方法完成，该方法内部通过requestLayout()来完成异步刷新请求。</p>
+<p>另外两个过程原理类似，暂时省略，查看源码可了解。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-Java知识点（一）：对象" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/07/Java知识点（一）：对象/" class="article-date">
+  	<time datetime="2018-06-07T14:22:08.308Z" itemprop="datePublished">2018-06-07</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/07/Java知识点（一）：对象/">
+        Java知识点（一）：对象
+        
+      </a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    在JAVA中，所有的东西都会被视为对象，通过对象的引用来操作对象。</p>
+<h4 id="存储分类"><a href="#存储分类" class="headerlink" title="存储分类"></a>存储分类</h4><ul>
+<li>寄存器：最快的存储区，位于处理器内部，但是它的数量有限，所以会根据需要进行分配。</li>
+<li>堆栈：位于RAM（随机访问存储器）中，可通过堆栈指针从处理器中获得直接支持。堆栈指针向下移动则分配新的内存，向上移动则释放内存。创建程序时，JAVA系统必须知道存储在堆栈内的所有项的确切生命周期，以便上下移动堆栈指针；对象引用位于堆栈，但对象并不存储在这。</li>
+<li>堆：通用的内存池，位于RAM。用于存放所有的Java对象。</li>
+<li>常量存储：常量值通常直接存放在程序代码内部；有时，在嵌入式系统中，常量本身会和其他部分分隔开，在这种情况下，可以选择将其放在ROM（只读内存器）中。</li>
+<li>非RAM：</li>
+</ul>
+<h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><p>​    java中的基本类型有：</p>
+<ul>
+<li><p>boolean：它的包装类型为Boolean，取值只能为true or false</p>
+</li>
+<li><p>char：16bit大小，包装类型为Character</p>
+</li>
+<li><p>byte：8bits，包装类型为Byte</p>
+</li>
+<li><p>short：16bits，包装类型为Short</p>
+</li>
+<li><p>int：32 bits，包装类型为Integer</p>
+</li>
+<li><p>long：64bits，包装类型为Long</p>
+</li>
+<li><p>float：32bits，包装类型为Float</p>
+</li>
+<li><p>double：64bits，包装类型为Double</p>
+<p>除此之外，Java提供了用于高精度计算的类：BigInteger和BigDecimal，提供的操作与基本类型的类似。</p>
+</li>
+</ul>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><p>​    在java中，数组会确保被初始化，而且不能在它的范围外被访问，因为在运行时会进行下标检查，有一定的代价。</p>
+<p>​    当创建一个数组时，实际上是创建了一个引用数组，并且每个引用都会自动被初始化为一个特定值。</p>
+<h4 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h4><p>​    一般来说，对象都是在new之后才分配存储空间，然后才可以被调用。但是，有时候想在没有创建对象时，也能调用对象中的方法，这时候就可以利用static关键字了。当某个事物被声明为static，即表明这个事物，不会与包含它的类的任何对象实例关联在一起，直接可以通过类名调用。</p>
+<p>​    被static生命的对象，在全局中只有一份存储空间，且它的生命周期与程序一样。</p>
+<p>​    在static方法中，不能调用非static的事物。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+      
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-EventBus的基本使用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -492,361 +949,9 @@
 
 
   
-    <article id="post-Android四大组件之Service" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/24/Android四大组件之Service/" class="article-date">
-  	<time datetime="2018-04-24T14:18:43.026Z" itemprop="datePublished">2018-04-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/24/Android四大组件之Service/">
-        Android四大组件之服务
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h4><p>​    利用服务，可以实现程序在后台运行，而且它非常适合那些不需要和用户交互而且要长期运行的任务；</p>
-<p>​    服务的运行不依赖于用户界面，即使当前app被切换（但该应用程序的进程没被kill，当被kill掉后，服务也会停止运行，如音乐app），它依然能够保持正常的运行；</p>
-<p>​    服务里的代码，默认运行在主线程中，因此，不能在服务中进行耗时的操作。如若需要，则子线程中需要手动创建。</p>
-<h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><p>​    创建一个MyService类继承自Service类(同时，也需要在AndroidManifest清单文件中注册，不过，一般来说，android studio会自动帮我们注册)，如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyService</span> <span class="keyword">extends</span> <span class="title">Service</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//服务创建的时候会调用onCreate()方法(只在服务第一次创建的时候调用)</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//服务每次启动的时候都会调用这个方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent,<span class="keyword">int</span> flags,<span class="keyword">int</span> startId)</span></span>&#123;</span><br><span class="line">        <span class="comment">//若需启动服务时，立刻运行某些操作，可把逻辑代码写在这里</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onStartCommand(intent,flags,startId);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//onBind()方法为Service中唯一的抽象方法，必须实现</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span></span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"must be implemented"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//一般在这个方法里，回收那些不再使用的资源</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​    清单文件中注册</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">application</span></span></span><br><span class="line"><span class="tag">             <span class="attr">....</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">service</span> </span></span><br><span class="line"><span class="tag">         <span class="attr">android:name</span>=<span class="string">".MyService"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">android:enable</span>=<span class="string">"true"</span>//创建服务时勾选的属性</span></span><br><span class="line"><span class="tag">         <span class="attr">android:exported</span>=<span class="string">"true"</span>//创建服务时勾选的属性</span></span><br><span class="line"><span class="tag">             &gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">application</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="启动和停止服务"><a href="#启动和停止服务" class="headerlink" title="启动和停止服务"></a>启动和停止服务</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构建intent启动Service(与activity类似)</span></span><br><span class="line">...</span><br><span class="line">    Intent intent = <span class="keyword">new</span> Intent(context,MyService.class);</span><br><span class="line">	<span class="comment">//启动服务调用的是seartService()方法</span></span><br><span class="line">	startService(intent);</span><br><span class="line">	<span class="comment">//停止服务则同样是，构建itent，然后调用stopService()方法</span></span><br><span class="line">	stopService(intent);</span><br></pre></td></tr></table></figure>
-<h4 id="Activity与Service通信"><a href="#Activity与Service通信" class="headerlink" title="Activity与Service通信"></a>Activity与Service通信</h4><p>​    调用onBind()方法，使activity与service进行关联，如利用Binder对象，对我们平时用到的下载功能进行管理，修改Service中的代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">...&#123;</span><br><span class="line">	<span class="keyword">private</span> DownloadBinder mBinder = <span class="keyword">new</span> DownloadBinder();</span><br><span class="line">	</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DownloadBinder</span> <span class="keyword">extends</span> <span class="title">Binder</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDownload</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//logic</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getProgress</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span></span>&#123;</span><br><span class="line">		<span class="comment">//这里变为在该方法中返回Binder对象</span></span><br><span class="line">        <span class="keyword">return</span> mBinder;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​    在activity中调用时:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">...&#123;</span><br><span class="line"><span class="keyword">private</span> MyService.DownloadBinder downloadBinder;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//重写ServiceConnection匿名类</span></span><br><span class="line">    <span class="keyword">private</span> ServiceConnection con = <span class="keyword">new</span> ServiceConnection()&#123;</span><br><span class="line">      </span><br><span class="line">        <span class="comment">//activity与service解绑时调用</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span></span>&#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//activity与service绑定时调用</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name,IBinder service)</span></span>&#123;</span><br><span class="line">            <span class="comment">//IBinder 向下转型获得DownloadBinder对象，即可调用service去实现任务</span></span><br><span class="line">            downloadBinder = (MyService.DownloadBinder) service;</span><br><span class="line">            <span class="comment">//调用DownloadBinder中的方法</span></span><br><span class="line">            downloadBinder.startDownload();</span><br><span class="line">            downloadBinder.getProgerss();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//绑定服务构建intent，并调用bindService()方法</span></span><br><span class="line">    Intent intent1 = <span class="keyword">new</span> Intent(<span class="keyword">this</span>,MyService.class);</span><br><span class="line">    bindService(intent1,con,BIND_AUTO_CREATE);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//解绑服务，类似，但调用的是unbindService()方法</span></span><br><span class="line">    ...</span><br><span class="line">     unbindService(con);</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="服务的声明周期"><a href="#服务的声明周期" class="headerlink" title="服务的声明周期"></a>服务的声明周期</h4><p>​    服务的生命周期就是以上重写的方法；与activity不同的是，每一个service只会存在一个实例，服务在启动之后会一直保持运行状态（onCreate() –&gt;startService())，然后无论调用多少次startService()方法，只会重新启动该service，而并不会创建新的service，而只要调用一次stopService()或service的stopSelf()方法，服务就会停止下来。</p>
-<h5 id="注意-假如对一个服务调用了startService-方法，又调用了bindService-方法，以上随便调用一个都会使service处于运行状态；假如只调用了其中一个的话，调用其相应的停止方法即可，但同时调用了的话，即也需要同时调用它们的停止方法才会令service停止运行。"><a href="#注意-假如对一个服务调用了startService-方法，又调用了bindService-方法，以上随便调用一个都会使service处于运行状态；假如只调用了其中一个的话，调用其相应的停止方法即可，但同时调用了的话，即也需要同时调用它们的停止方法才会令service停止运行。" class="headerlink" title="注意:假如对一个服务调用了startService()方法，又调用了bindService()方法，以上随便调用一个都会使service处于运行状态；假如只调用了其中一个的话，调用其相应的停止方法即可，但同时调用了的话，即也需要同时调用它们的停止方法才会令service停止运行。"></a>注意:假如对一个服务调用了startService()方法，又调用了bindService()方法，以上随便调用一个都会使service处于运行状态；假如只调用了其中一个的话，调用其相应的停止方法即可，但同时调用了的话，即也需要同时调用它们的停止方法才会令service停止运行。</h5><h4 id="使用前台服务"><a href="#使用前台服务" class="headerlink" title="使用前台服务"></a>使用前台服务</h4><p>​    因为服务的系统优先级比较低，当系统内存不足的时候，就可能会回收掉正在后台运行的服务；假如想要避免这种情况的话，可以使用前台服务；当使用前台服务时，它会一直显示在系统的状态栏中，类似于通知；如，一些天气app。</p>
-<p>​    实现如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">....&#123;</span><br><span class="line">    <span class="comment">//构建intent</span></span><br><span class="line">    Intent intent = <span class="keyword">new</span> Intent(context,XXXX.class);</span><br><span class="line">    PendingIntent pi = PendingIntent.getActivity(context,<span class="number">0</span>,intent,<span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    Notification notification = <span class="keyword">new</span> NotificationCompat.Builder(context)</span><br><span class="line">        .setContentTitle(..)</span><br><span class="line">     	.setContentText(...)</span><br><span class="line">        .setWhen(...)</span><br><span class="line">        .setSmallIcon(...)</span><br><span class="line">        .setLargeIcon(...)</span><br><span class="line">        .setContentIntent(pi)</span><br><span class="line">        .build();</span><br><span class="line">    <span class="comment">//调用该方法会让service变为前台服务</span></span><br><span class="line">    startForeground(<span class="number">1</span>,notification);</span><br><span class="line">    <span class="comment">//第一个参数为通知id,第二个为构建出来的Notification对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="IntentService"><a href="#IntentService" class="headerlink" title="IntentService"></a>IntentService</h4><p>由于Service默认运行在主线程中，因此不能进行耗时的操作，不然的话，需要开启子线程，进行耗时的操作；但手动开启子线程又会比较麻烦；因此，使用IntentService则可以比较好地解决以上两个在service中的问题，IntentService的实现如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyIntentService</span> <span class="keyword">extends</span> <span class="title">IntentService</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyIntentService</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//调用父类的构造方法</span></span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"MyIntentService"</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//这个方法是运行在子线程中的，所以可以进行耗时的操作</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onHandleIntent</span><span class="params">(Intent itent)</span></span>&#123;</span><br><span class="line">            <span class="comment">//logic operation</span></span><br><span class="line">        &#125;</span><br><span class="line">       </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.onDestroy();</span><br><span class="line">            <span class="comment">//release some resource</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="注意：由于IntentService会在运行结束后自动停止，因此，我们可以不用调用其停止方法也可实现其自动停止运行。"><a href="#注意：由于IntentService会在运行结束后自动停止，因此，我们可以不用调用其停止方法也可实现其自动停止运行。" class="headerlink" title="注意：由于IntentService会在运行结束后自动停止，因此，我们可以不用调用其停止方法也可实现其自动停止运行。"></a>注意：由于IntentService会在运行结束后自动停止，因此，我们可以不用调用其停止方法也可实现其自动停止运行。</h5>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Android四大组件之Broadcast" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/23/Android四大组件之Broadcast/" class="article-date">
-  	<time datetime="2018-04-23T14:49:36.160Z" itemprop="datePublished">2018-04-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/23/Android四大组件之Broadcast/">
-        Android四大组件之Broadcast
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> android中的广播分为以下两种类型：</span></span><br><span class="line"><span class="comment">	标准广播：一种完全异步执行的广播，广播发出后，所有的广播接收器几乎</span></span><br><span class="line"><span class="comment">				都会在同一时刻接收到这条广播消息，没有任何先后顺序，</span></span><br><span class="line"><span class="comment">				因此效率会比较高。</span></span><br><span class="line"><span class="comment">	有序广播：一种同步执行的广播，广播发出后，同一时刻只会有一个广播</span></span><br><span class="line"><span class="comment">				接收器能够收到这条广播消息；当该接收器中的逻辑执行完毕后，</span></span><br><span class="line"><span class="comment">				广播才会继续传递，因此有先后顺序（优先级高的广播接收器可先收到</span></span><br><span class="line"><span class="comment">				广播消息，并且可以截断正在传递的广播）。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"> <span class="comment">/* 接受系统广播 */</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	1.动态注册</span></span><br><span class="line"><span class="comment">		新建一个类，继承自BroadcastReceiver,重写onReceive()方法</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBroadcastReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context,Intent intent)</span></span>&#123;</span><br><span class="line">			<span class="comment">//logic...</span></span><br><span class="line">			<span class="comment">//不能在该方法下添加过多的逻辑或进行任何耗时的操作</span></span><br><span class="line">			<span class="comment">//在广播接收器中不允许开启线程。</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//在activity中注册监听</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> IntentFilter intentFilter;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> MyBroadcastReceiver myBroadcastReceiver;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundl savedInstanceState)</span></span>&#123;</span><br><span class="line">			<span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">			setContentView(...);</span><br><span class="line">			</span><br><span class="line">			intentFilter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">			intentFilter.addAction(<span class="string">"xxxxx"</span>);<span class="comment">//监听什么样的广播</span></span><br><span class="line">			myBroadcastReceiver = <span class="keyword">new</span> MyBroadcastReceiver();</span><br><span class="line">			</span><br><span class="line">			registerReceiver(myBroadcastReceiver,intentFilter);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">super</span>.onDestroy();</span><br><span class="line">			<span class="comment">//在这里取消注册广播接收器，释放资源</span></span><br><span class="line">			unregisterReceiver(myBroadcastReceiver);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	2.静态注册(AndroidManifest清单文件中注册该广播接收器，一般来说，系统会自动帮注册)</span></span><br><span class="line"><span class="comment">		在包目录下 new --&gt;Other --&gt;Broadcast Receiver创建接收器(和MyBroadcastReceiver类似)</span></span><br><span class="line"><span class="comment">		然后在清单文件中，添加&lt;intent-filter&gt;标签，添加action监听相应的广播，如添加监听开机的广播</span></span><br><span class="line"><span class="comment">		&lt;intent-filter&gt;</span></span><br><span class="line"><span class="comment">			&lt;action android:name="android.intent.action.BOOT_COMPLETED"/&gt;</span></span><br><span class="line"><span class="comment">		&lt;/intent-filter&gt;</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	3.发送自定义广播</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">		<span class="comment">//发送标准广播，构建intent发送,如：</span></span><br><span class="line">		Intent intent = <span class="keyword">new</span> Intent(<span class="string">"xxxx"</span>);<span class="comment">//发送的广播类型</span></span><br><span class="line">		sendBroadcast(intent);</span><br><span class="line">		<span class="comment">//将sendBroadcast()改为sendOrderBroadcast(intent,null);即变为发送有序广播,第二个参数为与权限相关的字符串</span></span><br><span class="line">		<span class="comment">//然后，在广播接收器中onReceive()方法中，调用abortBroadcast()发送即可截断该广播，</span></span><br><span class="line">		<span class="comment">//在清单文件中，为广播接收器设置优先级有先接收到该广播，</span></span><br><span class="line">		<span class="comment">//在intent-filter中添加 --&gt; &lt;intent-filter android:priority="100"&gt;&lt;action ....&gt; &lt;/intent-filter&gt;</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	4.使用本地广播(为了解决广播的安全型问题，因为以上的广播都属于系统全局广播，其他的程序也可接受，</span></span><br><span class="line"><span class="comment">	也能向我们发送各种垃圾广播;因此Android引入了一套本地广播机制)；本地广播是无法通过静态注册的方式</span></span><br><span class="line"><span class="comment">	来接受的；</span></span><br><span class="line"><span class="comment">	使用本地广播的优点有：</span></span><br><span class="line"><span class="comment">		1.可以明确知道正在发送的广播不会离开我们的程序，因此不必担心数据会泄露。</span></span><br><span class="line"><span class="comment">		2.其他的程序无法将广播发送到我们的程序内部，因此不需要担心会有安全漏洞的隐患</span></span><br><span class="line"><span class="comment">		3.发送本地广播比发送系统全局广播会更高效。</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="comment">//如：</span></span><br><span class="line">	<span class="comment">//在activity中注册监听</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> IntentFilter intentFilter;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> LocalReceiver localReceiver;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> LocalBroadcastManager localBroadcastManager;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundl savedInstanceState)</span></span>&#123;</span><br><span class="line">			<span class="keyword">super</span>.onCreate(savedInstanceState)</span><br><span class="line">			setContentView(...);</span><br><span class="line">			</span><br><span class="line">			localBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);<span class="comment">//获取实例</span></span><br><span class="line">			</span><br><span class="line">			....&#123;</span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span></span>&#123;</span><br><span class="line">					Intent intent = <span class="keyword">new</span> Intent(xxxx);</span><br><span class="line">					localBroadcastManager.sendBroadcast(intent);<span class="comment">//发送本地广播</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;;</span><br><span class="line">		intentFilter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">		intentFilter.addAction(xxxx);</span><br><span class="line">		localReceiver = <span class="keyword">new</span> LocalReceiver();</span><br><span class="line">		<span class="comment">//注册本地广播监听器</span></span><br><span class="line">		localBroadcastManager.registerReceiver(localReceiver,intentFilter);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">super</span>.onDestroy();</span><br><span class="line">			<span class="comment">//在这里取消注册广播接收器，释放资源</span></span><br><span class="line">			localBroadcastManager.unregisterReceiver(myBroadcastReceiver);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="class"><span class="keyword">class</span> <span class="title">LocalReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span></span>&#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context,Intent intent)</span></span>&#123;</span><br><span class="line">				....</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-adnroid之activity的启动模式" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/23/adnroid之activity的启动模式/" class="article-date">
-  	<time datetime="2018-04-23T14:48:16.475Z" itemprop="datePublished">2018-04-23</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/23/adnroid之activity的启动模式/">
-        adnroid之activity的启动模式
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="4种启动模式"><a href="#4种启动模式" class="headerlink" title="4种启动模式"></a>4种启动模式</h4><p>​    standard(默认)、singleTop、singleTask、singleInstance<br>activity的启动模式可在androidManifest清单文件下设置：android:launchMode属性，如：</p>
-<p><code>&lt;activity android:name=&quot;.XxxActivity android:launchMode=&quot;xxx&quot;/&gt;</code></p>
-<h4 id="Standard模式"><a href="#Standard模式" class="headerlink" title="Standard模式"></a>Standard模式</h4><p>​    不管activity是否已经存在返回栈中，每次启动该activity都会创建该活动的实例。如： A-&gt; B，B-&gt;A (以intent启动),则会创建新的A的实例处于栈顶</p>
-<h4 id="singleTop模式"><a href="#singleTop模式" class="headerlink" title="singleTop模式"></a>singleTop模式</h4><p>​    该模式下可以解决重复创建栈顶activity的问题,因为在该模式下启动activity时发现返回栈的栈顶是该activity，则直接使用它，不创建新的实例,但是，该activity不处于栈顶，即使栈中有其实例，启动时就会创建其实例。</p>
-<h4 id="singleTask模式"><a href="#singleTask模式" class="headerlink" title="singleTask模式"></a>singleTask模式</h4><p>​    每次启动activity时，系统会首先在返回栈中检查是否存在该活动的实例，如果发现存在则直接使用，并把处与该activity之上的其它所有activity统统出栈，没有发现则会创建新的实例。</p>
-<h4 id="singleInstance模式"><a href="#singleInstance模式" class="headerlink" title="singleInstance模式"></a>singleInstance模式</h4><p>​    该模式下的activity会启动一个新的返回栈来管理该activity。即另三种启动模式共用一个返回栈，该模式下的activity另用一个返回栈管理。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Android与H5交互" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/19/Android与H5交互/" class="article-date">
-  	<time datetime="2018-04-19T05:57:47.443Z" itemprop="datePublished">2018-04-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/19/Android与H5交互/">
-        Android与H5交互
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">以下内容参考自以下博客，该博客介绍更为详细易懂。</span></span><br><span class="line"><span class="comment"> https://blog.csdn.net/qq_24530405/article/details/52067474 </span></span><br><span class="line"><span class="comment"> https://www.jianshu.com/p/a25907862523</span></span><br><span class="line"><span class="comment"> </span></span><br><span class="line"><span class="comment"> 以下记录的用作有设计混编的时候参考。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* WebView:实现Android与H5互调，在Android中利用WebView显示H5页面 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">加载页面:loadUrl()</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">//加载assets目录下的test.html文件</span></span><br><span class="line">webView.loadUrl(<span class="string">"file:///android_asset/test.html"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//加载网络上的url</span></span><br><span class="line">webView.loadUrl(<span class="string">"www.baidu.com"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">setWebViewClient()设置了该方法后，</span></span><br><span class="line"><span class="comment">即打开新的链接以后就不会跳转到系统浏览器了，而是在本WebView中显示</span></span><br><span class="line"><span class="comment">如下：</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> webView.setWebViewClient(<span class="keyword">new</span> WebViewClient()&#123;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, String url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="string">"http://www.jikedaohang.com/"</span>.equals(url))                   &#123;</span><br><span class="line">        view.loadUrl(<span class="string">"https://www.baidu.com/"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"> &#125;;</span><br><span class="line"> <span class="comment">//WebViewClient主要用来辅助WebView处理各种通知、请求等事件，通过setWebViewClient方法设置</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//1.如，实现对网页的拦截</span></span><br><span class="line">	 webView.setWebViewClient(<span class="keyword">new</span> WebViewClient()&#123;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldOverrideUrlLoading</span><span class="params">(WebView view, String url)</span> </span>&#123;</span><br><span class="line">			<span class="comment">//加入是xxx地址，则加载yyy地址</span></span><br><span class="line">			<span class="keyword">if</span>(<span class="string">"xxx"</span>.equals(url))&#123;</span><br><span class="line">				view.loadUrl(<span class="string">"yyy"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//返回true or false的不同有什么影响，待了解</span></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">	<span class="comment">//2.实现加载网页时替换某资源(重写WebViewClient中的shouldInterceptRequest方法),如：</span></span><br><span class="line">	<span class="comment">// 第一个方法如下：</span></span><br><span class="line">	webView.setWebViewClient(<span class="keyword">new</span> WebViewClient()&#123;</span><br><span class="line">		 <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> WebResourceResponse <span class="title">shouldInterceptRequest</span><span class="params">(WebView view, String url)</span> </span>&#123;</span><br><span class="line">                WebResourceResponse response = <span class="keyword">null</span>;</span><br><span class="line">                <span class="keyword">if</span> (url.contains(<span class="string">"logo"</span>)) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        InputStream logo = getAssets().open(<span class="string">"logo.png"</span>);</span><br><span class="line">                        response = <span class="keyword">new</span> WebResourceResponse(<span class="string">"image/png"</span>, <span class="string">"UTF-8"</span>, logo);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> response;</span><br><span class="line">            &#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="comment">//第二个如下:</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3.设置开始加载网页、加载完成、加载错误时处理</span></span><br><span class="line">	webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;    </span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageStarted</span><span class="params">(WebView view, String url, Bitmap favicon)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">super</span>.onPageStarted(view, url, favicon);  </span><br><span class="line">        <span class="comment">//加载开始</span></span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageFinished</span><span class="params">(WebView view, String url)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">super</span>.onPageFinished(view, url);  </span><br><span class="line">        <span class="comment">//加载完成</span></span><br><span class="line">		</span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceivedError</span><span class="params">(WebView view, <span class="keyword">int</span> errorCode, String description, String failingUrl)</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">super</span>.onReceivedError(view, errorCode, description, failingUrl);  </span><br><span class="line">        <span class="comment">//加载错误</span></span><br><span class="line">    &#125;    </span><br><span class="line">&#125;);  </span><br><span class="line">	</span><br><span class="line">	<span class="comment">//4.处理https请求(默认是不处理https请求的),需重写一下方法</span></span><br><span class="line">	webView.setWebViewClient(<span class="keyword">new</span> WebViewClient() &#123;    </span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceivedSslError</span><span class="params">(WebView view, SslErrorHandler handler, SslError error)</span> </span>&#123;  </span><br><span class="line">        handler.proceed();  <span class="comment">// 接受信任所有网站的证书  </span></span><br><span class="line">        <span class="comment">// handler.cancel();   // 默认操作 不处理  </span></span><br><span class="line">        <span class="comment">// handler.handleMessage(null);  // 可做其他处理  </span></span><br><span class="line">    &#125;   </span><br><span class="line">	&#125;); </span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">WebChromeClient的使用:处理Javascript的对话框、网站图标、网站标题以及网页加载进度等</span></span><br><span class="line"><span class="comment">通过setWebChromeClient设置，如：</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> webView.setWebChromeClient(<span class="keyword">new</span> WebChromeClient() &#123;    </span><br><span class="line"></span><br><span class="line">	<span class="comment">//重写该方法显示加载进度</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onProgressChanged</span><span class="params">(WebView view, <span class="keyword">int</span> progress)</span> </span>&#123;    </span><br><span class="line">          </span><br><span class="line">    &#125; </span><br><span class="line">&#125;); </span><br><span class="line"></span><br><span class="line"><span class="comment">//优化html加载速度</span></span><br><span class="line"><span class="comment">//1.首先在WebView初始化时判断当前版本</span></span><br><span class="line"><span class="keyword">if</span>(Build.VERSION.SDK_INT &gt;= <span class="number">19</span>) &#123;  </span><br><span class="line"><span class="comment">/*因为4.4以上系统在onPageFinished时再恢复图片加载时,如果存在多张图片引用的是相同的src时，会只有一个image标签得到加载，因而对于这样的系统我们就先直接加载。*/</span>        </span><br><span class="line">	webView.getSettings().setLoadsImagesAutomatically(<span class="keyword">true</span>);  </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;  </span><br><span class="line">		<span class="comment">//先不加载</span></span><br><span class="line">        webView.getSettings().setLoadsImagesAutomatically(<span class="keyword">false</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">//2.在WebView的WebViewClient子类中重写onPageFinished()方法添加如下代码： </span></span><br><span class="line"> <span class="meta">@Override</span>  </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageFinished</span><span class="params">(WebView view, String url)</span> </span>&#123;  </span><br><span class="line">	<span class="comment">//页面加载完成时，再加载图片</span></span><br><span class="line">    <span class="keyword">if</span>(!webView.getSettings().getLoadsImagesAutomatically()) &#123;  </span><br><span class="line">        webView.getSettings().setLoadsImagesAutomatically(<span class="keyword">true</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">DownloadListener的使用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">MyDownLoadListener</span> <span class="keyword">implements</span> <span class="title">DownloadListener</span></span>&#123;</span><br><span class="line">	 </span><br><span class="line">	 <span class="meta">@Override</span></span><br><span class="line">	 <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDownLoadStart</span><span class="params">(String url,String userAgent,String contentDisposition, String mimetype, <span class="keyword">long</span> contentLength)</span></span>&#123;</span><br><span class="line">		 <span class="comment">//下载任务...，主要有两种方式</span></span><br><span class="line">          <span class="comment">//（1）自定义下载任务</span></span><br><span class="line">          <span class="comment">//（2）调用系统的download的模块</span></span><br><span class="line">		  Uri uri = Uri.parse(url);</span><br><span class="line">		  Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW,uri);</span><br><span class="line">		  startActivity(intent);</span><br><span class="line">		  </span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br><span class="line">	<span class="comment">//webView设置监听</span></span><br><span class="line">	webView.setDownLoadListener(<span class="keyword">new</span> MyDownLoadListener());</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">goBack():返回上一浏览页面</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">	<span class="comment">// 在activity中重写一下方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyDown</span><span class="params">(<span class="keyword">int</span> keyCode,KeyEvent event)</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//其中webView.canGoBack()在webView含有一个可后退的浏览记录时返回true</span></span><br><span class="line">		<span class="keyword">if</span> ((keyCode == KeyEvent.KEYCODE_BACK) &amp;&amp; webView.canGoBack()) &#123;       </span><br><span class="line">            webView.goBack();       </span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;       </span><br><span class="line">        &#125;       </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.onKeyDown(keyCode, event);   </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">	WebSettings的配置:利用webView.getSettings()获取WebSettings对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line">	<span class="comment">/* 设置支持js */</span></span><br><span class="line">	webSettings.setJavaScriptEnabled(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置缓存方式 */</span></span><br><span class="line">	webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE)<span class="comment">//不使用缓存，只从网络获取数据</span></span><br><span class="line">		<span class="comment">//有以下的模式:</span></span><br><span class="line">		<span class="comment">/* </span></span><br><span class="line"><span class="comment">		LOAD_CACHE_ONLY: 不使用网络，只读取本地缓存数据。 </span></span><br><span class="line"><span class="comment">		LOAD_DEFAULT: 根据cache-control决定是否从网络上取数据。 </span></span><br><span class="line"><span class="comment">		LOAD_CACHE_NORMAL: API level 17中已经废弃, 从API level 11开始作用同LOAD_DEFAULT模式。 </span></span><br><span class="line"><span class="comment">		LOAD_NO_CACHE: 不使用缓存，只从网络获取数据。 </span></span><br><span class="line"><span class="comment">		LOAD_CACHE_ELSE_NETWORK：只要本地有，无论是否过期，或者no-cache，都使用缓存中的数据。</span></span><br><span class="line"><span class="comment">		*/</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* 开启DOM storage API功能（HTML5 提供的一种标准的接口，主要将键值对存储在本地，在页面加载完毕后可以通过 JavaScript 来操作这些数据。） */</span></span><br><span class="line">	settings.setDomStorageEnabled(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置数据库缓存路径 */</span></span><br><span class="line">	webSettings.setDatabasePath(path);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置Application Caches缓存目录 */</span></span><br><span class="line">	webSettings.setAppCachePath(path);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置默认编码 */</span></span><br><span class="line">	webSettings.setDefaultTextEncodingName(“utf-<span class="number">8</span>”);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 将图片调整到适合WebView的大小 */</span></span><br><span class="line">	webSettings.setUseWideViewPort(<span class="keyword">false</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 支持缩放 */</span></span><br><span class="line">	webSettings.setSupportZoom(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置支持缩放 */</span></span><br><span class="line">	webSettings.setBuiltInZoomControls(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 支持内容重新布局 */</span></span><br><span class="line">	webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 多窗口 */</span></span><br><span class="line">	webSettings.supportMultipleWindows();</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 设置可以访问文件 */</span></span><br><span class="line">	webSettings.setAllowFileAccess(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 当webview调用requestFocus时为webview设置节点 */</span></span><br><span class="line">	webSettings.setNeedInitialFocus(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 支持通过JS打开新窗口 */</span></span><br><span class="line">	webSettings.setJavaScriptCanOpenWindowsAutomatically(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 缩放至屏幕的大小 */</span></span><br><span class="line">	webSettings.setLoadWithOverviewMode(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 支持自动加载图片 */</span></span><br><span class="line">	webSettings.setLoadsImagesAutomatically(<span class="keyword">true</span>);</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="comment">/* WebViewClient的回调列表 </span></span><br><span class="line"><span class="comment">		WebViewClient主要用来辅助WebView处理各种通知、请求等事件，通过setWebViewClient方法设置。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">		<span class="comment">/* 更新历史记录 */</span></span><br><span class="line">		doUpdateVisitedHistory(WebView view, String url, <span class="keyword">boolean</span> isReload);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 应用程序重新请求网页数据 */</span></span><br><span class="line">		onFormResubmission(WebView view, Message dontResend, Message resend);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 在加载页面资源时会调用，每一个资源（比如图片）的加载都会调用一次 */</span></span><br><span class="line">		onLoadResource(WebView view, String url)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 开始载入页面调用，通常我们可以在这设定一个loading的页面，告诉用户程序在等待网络响应。 */</span></span><br><span class="line">		onPageStarted(WebView view, String url, Bitmap favicon)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 在页面加载结束时调用。同样道理，我们知道一个页面载入完成，于是我们可以关闭loading 条，切换程序动作。 */</span></span><br><span class="line">		onPageFinished(WebView view, String url)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 报告错误信息 */</span></span><br><span class="line">		onReceivedError(WebView view, <span class="keyword">int</span> errorCode, String description, String failingUrl)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 获取返回信息授权请求 */</span></span><br><span class="line">		onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host,String realm)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 重写此方法可以让webview处理https请求 */</span></span><br><span class="line">		onReceivedSslError(WebView view, SslErrorHandler handler, SslError error)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* WebView发生改变时调用 */</span></span><br><span class="line">		onScaleChanged(WebView view, <span class="keyword">float</span> oldScale, <span class="keyword">float</span> newScale)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* Key事件未被加载时调用 */</span></span><br><span class="line">		onUnhandledKeyEvent(WebView view, KeyEvent event)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 重写此方法才能够处理在浏览器中的按键事件。 */</span></span><br><span class="line">		shouldOverrideKeyEvent(WebView view, KeyEvent event)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 在网页跳转时调用，这个函数我们可以做很多操作，比如我们读取到某些特殊的URL，</span></span><br><span class="line"><span class="comment">		于是就可以不打开地址，取消这个操作，进行预先定义的其他操作，这对一个程序是非常必要的。 */</span></span><br><span class="line">		shouldOverrideUrlLoading(WebView view, String url)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 在加载某个网页的资源的时候多次调用 */</span></span><br><span class="line">		shouldInterceptRequest(WebView view, WebResourceRequest request)</span><br><span class="line">		</span><br><span class="line">	</span><br><span class="line"><span class="comment">/* WebChromeClient的回调列表</span></span><br><span class="line"><span class="comment">WebChromeClient主要用来辅助WebView处理Javascript的对话框、网站图标、网站标题以及网页加载进度等。</span></span><br><span class="line"><span class="comment">通过WebView的setWebChromeClient()方法设置。 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">	<span class="comment">/* 监听网页加载进度 */</span></span><br><span class="line">	onProgressChanged(WebView view, <span class="keyword">int</span> newProgress)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 监听网页标题 : 比如百度页面的标题是“百度一下，你就知道” */</span></span><br><span class="line">	onReceivedTitle(WebView view, String title)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 监听网页图标 */</span></span><br><span class="line">	onReceivedIcon(WebView view, Bitmap icon)</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">Java和JavaScript互调： </span></span><br><span class="line"><span class="comment">	为方便展示，使用addJavascriptInterface方式实现与本地js交互（存在漏洞）。</span></span><br><span class="line"><span class="comment">	也可通过其他方式实现，比如拦截ur进行参数解析l等。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">	<span class="comment">//js代码如：</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	function javaCallJs(arg)&#123; </span></span><br><span class="line"><span class="comment">		document.getElementById("content").innerHTML =</span></span><br><span class="line"><span class="comment">		("welcome:"+arg);</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 在Java中调用</span></span><br><span class="line">	webView.loadUrl(<span class="string">"javascript:javaCallJs("</span>+<span class="string">"'"</span>+name+<span class="string">"'"</span>+<span class="string">")"</span>);<span class="comment">//调用了JS中一个叫javaCallJs(arg)的方法，并传入了一个name参数</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* JS调用Java */</span></span><br><span class="line">		<span class="comment">//配置js接口</span></span><br><span class="line">		webView.addJavaScriptInterface(<span class="keyword">new</span> JSInterface(),<span class="string">"Android"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 实现JavaScript接口类</span></span><br><span class="line">		<span class="class"><span class="keyword">class</span> <span class="title">JSInterface</span></span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="meta">@JavascriptInterface</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showToast</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">				....</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//js中调用:</span></span><br><span class="line">		<span class="comment">// &lt;input type="button" value="点击Android被调用" onclick="window.Android.showToast('JS中传来的参数')"/&gt;</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Java设计模式分析与记录" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/19/Java设计模式分析与记录/" class="article-date">
-  	<time datetime="2018-04-19T05:56:14.453Z" itemprop="datePublished">2018-04-19</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/19/Java设计模式分析与记录/">
-        Java设计模式分析与记录
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 工厂方法模式 :使用于凡是出现了大量的产品需要创建，并且具有共同的接口时，可以通过工厂方法模式进行创建*/</span></span><br><span class="line">	<span class="comment">//第一种：普通工厂:建立一个工厂类，对实现了同一接口的一些类进行实例的创建</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 统一接口 */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Call</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建实现类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SayHello</span> <span class="keyword">implements</span> <span class="title">Call</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"Say Hello"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SayHi</span> <span class="keyword">implements</span> <span class="title">Call</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"Say Hi"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建工厂</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallFactory</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Call <span class="title">produce</span><span class="params">(String type)</span></span>&#123;</span><br><span class="line">			<span class="comment">//根据输入的类型创建需要的对象</span></span><br><span class="line">			<span class="keyword">if</span>(type.equals(<span class="string">"Hello"</span>))&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> SayHello();</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(type.equals(<span class="string">"Hi"</span>))&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> SayHi();</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第二种：多个工厂方法模式：在普通工厂方法模式中，如果传递的字符串出错，则不能正确创建对象，</span></span><br><span class="line">	<span class="comment">//而多个工厂方法模式是提供多个工厂方法，分别创建对象</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//接口与实现类同普通工厂一样，不同的是工厂的实现</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallFactory</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* </span></span><br><span class="line"><span class="comment">		分别提供创建不同对象的方法，</span></span><br><span class="line"><span class="comment">		避免如普通工厂中，传入类型错误，返回为null的问题</span></span><br><span class="line"><span class="comment">		*/</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Call <span class="title">sayHelloProduce</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> SayHello();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Call <span class="title">sayHiProduce</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> SayHi();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//第三种：静态工厂方法模式</span></span><br><span class="line">	<span class="comment">// 将上面的多个工厂方法模式里的方法置为静态的，不需要创建实例，直接调用即可</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallFactory</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//改为static 直接调用</span></span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Call <span class="title">sayHelloProduce</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> SayHello();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Call <span class="title">sayHiProduce</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> SayHi();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 抽象工厂模式:由于工厂模式存在的问题是，需要扩展程序的时候，</span></span><br><span class="line"><span class="comment">	就需要修改工厂类，这明显是违背了开闭原则，因此就用到抽象工厂模式，</span></span><br><span class="line"><span class="comment">	创建多个工厂类，这样一旦需要增加新的功能，直接增加新的工厂类就可以了</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">	<span class="comment">// 实现类与统一接口均同上</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//新增一个工厂接口</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Provider</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Call <span class="title">produce</span><span class="params">()</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//需要对象时，直接新建该对象提供工厂类即可，如：</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SayHelloProduceFactory</span> <span class="keyword">implements</span> <span class="title">Provider</span></span>&#123;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Call <span class="title">produce</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> SayHello();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	....</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//这样，即使需要扩展新的需求，只需要实现provider，并添加新的工厂去实现即可，无需改动其他代码。</span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">单例模式:保证在JVM中，该对象只有一个实例存在 </span></span><br><span class="line"><span class="comment">当某些类需要频繁创建，并且该类比较消耗资源（访问数据库，I/O等）时，</span></span><br><span class="line"><span class="comment">利用单例模式可以减少资源的消耗</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//比较简单的实现如下：</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">		<span class="comment">//设置该实例为私有，防止被引用，设置为null目的是实现延迟加载</span></span><br><span class="line">		println <span class="keyword">static</span> Singlton instance = <span class="keyword">null</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//将构造方法私有化，防止被实例化</span></span><br><span class="line">		<span class="keyword">private</span> Singleton&#123;&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//静态方法，获取实例,synchronized确保线程安全</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">				instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">return</span> instance;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> instance;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	以上做法虽然可以确保线程安全，但由于每次调用getInstance()都要给对象</span></span><br><span class="line"><span class="comment">	上锁，所以导致性能下降,因此可改为</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(instance)&#123;</span><br><span class="line">				<span class="comment">// 当调用的时候是不需要加锁的，只有在instance为null，</span></span><br><span class="line">				<span class="comment">// 并创建对象的时候才需要加锁，性能有一定的提升</span></span><br><span class="line">				<span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">					instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">					<span class="keyword">return</span> instance;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> instance;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* </span></span><br><span class="line"><span class="comment">	当以上方法依然会存在问题，因为，在JAVA中</span></span><br><span class="line"><span class="comment">	创建对象和赋值操作是分开进行的，JVM并不会保证这两个操作的先后</span></span><br><span class="line"><span class="comment">	顺序；有可能JVM会为新的Singleton实例分配空间，</span></span><br><span class="line"><span class="comment">	然后直接赋值给instance成员，然后再去初始化这个Singleton实例，这样是有导致</span></span><br><span class="line"><span class="comment">	获取到的实例可能未初始化而出错。</span></span><br><span class="line"><span class="comment">	因此，再一步优化为：</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//将构造方法私有化，防止被实例化</span></span><br><span class="line">		<span class="keyword">private</span> Singleton&#123;&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//创建一个内部类维护单例</span></span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonFactory</span></span>&#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//获取实例</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> SingletonFactory.instance;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 如果该对象被用于序列化，可以保证对象在序列化前后保持一致 */</span>  </span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> getInstance();  </span><br><span class="line">		</span><br><span class="line">    &#125;  </span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//为单例对象的属性同步更新</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest</span> </span>&#123;  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingletonTest instance = <span class="keyword">null</span>;  </span><br><span class="line">    <span class="keyword">private</span> Vector properties = <span class="keyword">null</span>;  </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Vector <span class="title">getProperties</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> properties;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingletonTest</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">syncInit</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </span><br><span class="line">            instance = <span class="keyword">new</span> SingletonTest();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonTest <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;  </span><br><span class="line">            syncInit();  </span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">return</span> instance;  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateProperties</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        SingletonTest shadow = <span class="keyword">new</span> SingletonTest();  </span><br><span class="line">        properties = shadow.getProperties();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">Builder模式:将一个复杂对象的构建与表示分离，</span></span><br><span class="line"><span class="comment">同样的构建过程可以创建不同的表示。</span></span><br><span class="line"><span class="comment">在Android中，常用的AlertDialog.Builder 用的就是Builder模式</span></span><br><span class="line"><span class="comment">实现过程与下面类似，不同的是，Builder利用内部类实现。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">优点：良好的封装性；建造者独立，容易扩展；</span></span><br><span class="line"><span class="comment">缺点:会产生多余的Builder对象以及Director对象，消耗内存；对象的构建过程暴露。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">	<span class="comment">//实现如下：</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//个体抽象类，统一规范</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">		<span class="keyword">protected</span> String name;</span><br><span class="line">		<span class="keyword">protected</span> <span class="keyword">int</span> age;</span><br><span class="line">		<span class="keyword">protected</span> <span class="keyword">int</span> sex;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">protected</span> <span class="title">Person</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(<span class="keyword">int</span> sex)</span></span>;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//实现类</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Boy</span> <span class="keyword">extends</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> String name;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">int</span> sex;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.name = name;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.age = age;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(<span class="keyword">int</span> sex)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.sex = sex;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//Builder抽象类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildName</span><span class="params">(String name)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildAge</span><span class="params">(<span class="keyword">int</span> age)</span></span>;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSex</span><span class="params">(<span class="keyword">int</span> sex)</span></span>;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//创建个体类</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> Person <span class="title">create</span><span class="params">()</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//Builder实现类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoyBuilder</span> <span class="keyword">extends</span> <span class="title">Builder</span></span>&#123;</span><br><span class="line">		<span class="keyword">private</span> Boy boy = <span class="keyword">new</span> Boy();</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">			boy.setName(name);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildAge</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">			boy.setAge(age);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSex</span><span class="params">(<span class="keyword">int</span> sex)</span></span>&#123;</span><br><span class="line">			boy.setSex(sex);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Person <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> boy;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//封装实现细节</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Sample</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">private</span> Builder mBuilder;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Sample</span><span class="params">(Builder mBuilder)</span></span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.mBuilder = mBuilder;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* 构建个体 */</span></span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">construct</span><span class="params">(String name,<span class="keyword">int</span> age,<span class="keyword">int</span> sex)</span></span>&#123;</span><br><span class="line">			mBuilder.buildName(name);</span><br><span class="line">			mBuilder.buildAge(age);</span><br><span class="line">			mBuilder.buildSex(sex);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//调用</span></span><br><span class="line">	Builder boyBuilder = <span class="keyword">new</span> BoyBuilder();</span><br><span class="line">	Sample sample = <span class="keyword">new</span> Sample(boyBuilder);</span><br><span class="line">	sample.construct(<span class="string">"张三"</span>,<span class="number">24</span>,<span class="number">0</span>);</span><br><span class="line">	</span><br><span class="line"><span class="comment">/* 原型模式:将一个对象作为原型，对其进行复制、克隆，产生一个和原对象类似的新对象 */</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//原型类实现Clonable接口（空接口）</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Clonable</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">			<span class="comment">//必须调用super.clone(),调用的是Object的clone()方法</span></span><br><span class="line">			Person person = (Person) <span class="keyword">super</span>.clone();</span><br><span class="line">			<span class="keyword">return</span> person;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 浅复制：将一个对象复制后，基本数据类型的变量都会重新创建，而引用类型，指向的还是原对象所指向的。</span></span><br><span class="line">	<span class="comment">// 深复制：将一个对象复制后，不论是基本数据类型还有引用类型，都是重新创建的。</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实现如下：</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Clonable</span>,<span class="title">Serializable</span></span>&#123;</span><br><span class="line">		<span class="comment">//序列化id</span></span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">		<span class="keyword">private</span> String name;</span><br><span class="line">		<span class="keyword">private</span> SerializableObject obj</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//浅复制</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">			<span class="comment">//必须调用super.clone(),调用的是Object的clone()方法</span></span><br><span class="line">			Person person = (Person) <span class="keyword">super</span>.clone();</span><br><span class="line">			<span class="keyword">return</span> person;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//深复制</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">deepClone</span><span class="params">()</span> <span class="keyword">throws</span> IOException,ClassNotFoundException </span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="comment">/* 写入当前对象的二进制流 */</span>  </span><br><span class="line">			ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">			ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(bos);</span><br><span class="line">			oos.writeObject(<span class="keyword">this</span>);</span><br><span class="line">			</span><br><span class="line">			<span class="comment">/* 读出二进制流产生的新对象 */</span></span><br><span class="line">			ByteArrayInputStream bis = <span class="keyword">new</span> ByteArrayInputStream(bos.toByteArray());</span><br><span class="line">			ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(bis);</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> ois.readObject();</span><br><span class="line">			</span><br><span class="line">			<span class="function"><span class="keyword">public</span> String <span class="title">getString</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">				<span class="keyword">return</span> string;  </span><br><span class="line">			&#125;  </span><br><span class="line">  </span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setString</span><span class="params">(String string)</span> </span>&#123;  </span><br><span class="line">				<span class="keyword">this</span>.string = string;  </span><br><span class="line">			&#125;  </span><br><span class="line">  </span><br><span class="line">			<span class="function"><span class="keyword">public</span> SerializableObject <span class="title">getObj</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">				<span class="keyword">return</span> obj;  </span><br><span class="line">			&#125;  </span><br><span class="line">  </span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setObj</span><span class="params">(SerializableObject obj)</span> </span>&#123;  </span><br><span class="line">				<span class="keyword">this</span>.obj = obj;  </span><br><span class="line">			&#125;  </span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">SerializableObject</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-String、StringBuilder与StringBuffer的区别" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/04/17/String、StringBuilder与StringBuffer的区别/" class="article-date">
-  	<time datetime="2018-04-17T14:30:31.087Z" itemprop="datePublished">2018-04-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/17/String、StringBuilder与StringBuffer的区别/">
-        Java知识点记录:String,StringBuilder,StringBuffer的区别
-        
-      </a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">String,StringBuilder,StringBuffer的区别:</span></span><br><span class="line"><span class="comment">		String(适用于少量的字符串操作的情况) :不可变且速度最慢;如 String s = "123"; s = s +"456"; </span></span><br><span class="line"><span class="comment">				最后打印s 会输出123456。表面上看起来好像是s改变了，但实际上JVM执行的过程是--&gt;新建String对象 s 并赋值为“123”--&gt; 新建新的对象s</span></span><br><span class="line"><span class="comment">				在原有的内容基础上再加上"456"并赋值给s,原来的s则会被回收掉；实际上s是没有变过的。所以说，String是不可变的，且由于不能创建新的</span></span><br><span class="line"><span class="comment">				String对象，所以执行速度会慢。（注：String s = "123"+"456"--&gt;该表达式等价于s = "123456";所以是没有创建两个s去进行赋值。</span></span><br><span class="line"><span class="comment">				</span></span><br><span class="line"><span class="comment">		以下两个方法均是：直接对该对象进行更改，而不进行创建和回收的操作，所以执行速度快。</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">		StringBuilder(适用于单线程下在字符缓冲区进行大量操作的情况):可变，执行速度最快(非线程安全的);（一般情况下，均是使用该方法）。</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">		StringBuffer(适用多线程下在字符缓冲区进行大量操作的情况):可变;因为StringBuffer对象在字符串缓冲区被多个线程使用时，</span></span><br><span class="line"><span class="comment">		它的许多方法中可以带有synchronized关键字(也因此会导致执行速度变慢)，所以可以保证线程是安全的。(但一般情况下，也比较少使用)。</span></span><br><span class="line"><span class="comment">		*/</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-      
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </div>

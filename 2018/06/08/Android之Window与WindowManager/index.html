@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android之Window与WindowManager | aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Window​    在Android中，window表示一个窗口的概念，在我们需要在桌面上显示一个类似于悬浮窗的效果时，就需要用到window来实现。 ​    window是一个抽象类，它的具体实现是phoneWindow。创建一个window，只需要通过windowManager即可完成；windowMnager是外界访问window的入口，window的具体实现位于，windowMange">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之Window与WindowManager">
+<meta property="og:url" content="http://yoursite.com/2018/06/08/Android之Window与WindowManager/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="Window​    在Android中，window表示一个窗口的概念，在我们需要在桌面上显示一个类似于悬浮窗的效果时，就需要用到window来实现。 ​    window是一个抽象类，它的具体实现是phoneWindow。创建一个window，只需要通过windowManager即可完成；windowMnager是外界访问window的入口，window的具体实现位于，windowMange">
+<meta property="og:updated_time" content="2018-06-08T08:41:16.996Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之Window与WindowManager">
+<meta name="twitter:description" content="Window​    在Android中，window表示一个窗口的概念，在我们需要在桌面上显示一个类似于悬浮窗的效果时，就需要用到window来实现。 ​    window是一个抽象类，它的具体实现是phoneWindow。创建一个window，只需要通过windowManager即可完成；windowMnager是外界访问window的入口，window的具体实现位于，windowMange">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Android之Window与WindowManager" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/08/Android之Window与WindowManager/" class="article-date">
+  	<time datetime="2018-06-08T08:41:16.935Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android之Window与WindowManager
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Window"><a href="#Window" class="headerlink" title="Window"></a>Window</h3><p>​    在Android中，window表示一个窗口的概念，在我们需要在桌面上显示一个类似于悬浮窗的效果时，就需要用到window来实现。</p>
+<p>​    window是一个抽象类，它的具体实现是phoneWindow。创建一个window，只需要通过windowManager即可完成；windowMnager是外界访问window的入口，window的具体实现位于，windowMangerService中，windowMangerService与windowManager的交互是一个ipc过程。Android中的所有视图都是通过window来呈现的，包括activity、dialog、toast，它们的视图实际上都是附加在window上，因此，window实际是view的管理者。</p>
+<p>​    通过windowMnager添加一个window的过程如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mButton = <span class="keyword">new</span> Button(<span class="keyword">this</span>);</span><br><span class="line">mButton.setText(<span class="string">"button"</span>);</span><br><span class="line">mLp = <span class="keyword">new</span> WindowManager.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT,</span><br><span class="line">                                    <span class="number">0</span>,<span class="number">0</span>,PixelFormat.TRANSPARENT);</span><br><span class="line">mLp.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL</span><br><span class="line">|LayoutParams.FLAG_NOT_FOCUSABLE|LayoutParams.FLAG_SHOW_WHEN_LOCKED；</span><br><span class="line">mLp.gravity = Gravity.LEFT |Gravity.TOP;</span><br><span class="line">mLp.x = <span class="number">100</span>;</span><br><span class="line">mLp.y = <span class="number">300</span>;</span><br><span class="line">mWindowMnager.addView(mButton,mLp);</span><br><span class="line"></span><br><span class="line"><span class="comment">//以上为添加一个button到屏幕坐标为（100，300）的位置上。</span></span><br><span class="line"><span class="comment">//其中，Flags参数表示window的属性，具体属性意义查看文档。</span></span><br></pre></td></tr></table></figure>
+<h4 id="Window的类型"><a href="#Window的类型" class="headerlink" title="Window的类型"></a>Window的类型</h4><p>​    window的类型有三种，分别为应用window，对应一个acitivity、子window（不能单独存在，需要附属在特定的父window中，如Dialog就是一个子window）、系统window（需要声明权限才能创建的window，如Toast和系统状态栏）。</p>
+<p>​    window是分层的，每个window都有对应的z-ordered，层级大的会覆盖在层级小的window上面；其中应用window的层级范围是1~99，子window的层级范围为1000~1999，系统window的范围为2000~2999，这些层级范围对应着windowManager.LayoutParams的type参数。</p>
+<p>​    在使用系统window时，需声明权限：</p>
+<p>&lt;uses-permission android:name=”android.permission.SYSTEM_ALERT_WINDOW”/</p>
+<p>不然会报错。</p>
+<h3 id="WindowManger的功能"><a href="#WindowManger的功能" class="headerlink" title="WindowManger的功能"></a>WindowManger的功能</h3><p>​    常用的三个方法为，添加view：addView()、更新view：updateView()、删除view：removeView()。</p>
+<h3 id="Window的内部机制"><a href="#Window的内部机制" class="headerlink" title="Window的内部机制"></a>Window的内部机制</h3><p>​    每一个window都对应着一个View和一个ViewRootImpl，window与view通过ViewRootImpl建立联系。</p>
+<h4 id="window的添加过程"><a href="#window的添加过程" class="headerlink" title="window的添加过程"></a>window的添加过程</h4><p>​    通过windowManager的addView来实现，windowManager是一个接口，它的实现类为WindowManagerImpl。</p>
+<p>​    查看该类的源码可知，它的三大操作时交由windowManagerGlobal来处理的，它时以工厂的形式向外提供自己的实例。它的addView方法主要分为以下几步：</p>
+<h5 id="1-检查参数是否合法，如果是子window的话还需要调整一些布局参数"><a href="#1-检查参数是否合法，如果是子window的话还需要调整一些布局参数" class="headerlink" title="1.检查参数是否合法，如果是子window的话还需要调整一些布局参数"></a>1.检查参数是否合法，如果是子window的话还需要调整一些布局参数</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(view == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(display == <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(!(params <span class="keyword">instanceof</span> WindowManager.LayoutParams))&#123;</span><br><span class="line">    <span class="comment">//throw some exception</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">final</span> WindowManager.LayoutParams wParams = (WindowManager.LayoutParams) params;</span><br><span class="line"><span class="keyword">if</span>(parentWindow != <span class="keyword">null</span>)&#123;</span><br><span class="line">    parentWindow.adjustLayoutParamsForSubWindow(wparams);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="2-创建ViewRootImpl并将View添加到列表中"><a href="#2-创建ViewRootImpl并将View添加到列表中" class="headerlink" title="2.创建ViewRootImpl并将View添加到列表中"></a>2.创建ViewRootImpl并将View添加到列表中</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root = <span class="keyword">new</span> ViewRoootImpl(view.getContext(),display);</span><br><span class="line">view.setLayoutParams(wparams);</span><br><span class="line"></span><br><span class="line"><span class="comment">//以下列表均为WindowManagerGlobal中的参数</span></span><br><span class="line">mViews.add(view);</span><br><span class="line">mRoots.add(root);</span><br><span class="line">mParams.add(wparams);</span><br></pre></td></tr></table></figure>
+<h5 id="3-通过ViewRootImpl来更新界面并完成添加过程"><a href="#3-通过ViewRootImpl来更新界面并完成添加过程" class="headerlink" title="3.通过ViewRootImpl来更新界面并完成添加过程"></a>3.通过ViewRootImpl来更新界面并完成添加过程</h5><p>​    该过程由ViewRootImpl的setView()方法完成，该方法内部通过requestLayout()来完成异步刷新请求。</p>
+<p>另外两个过程原理类似，暂时省略，查看源码可了解。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/08/Java知识点（二）：初始化与清理/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          Java知识点（二）：初始化与清理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/07/Java知识点（一）：对象/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java知识点（一）：对象</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Android之Window与WindowManager" data-title="Android之Window与WindowManager" data-url="http://yoursite.com/2018/06/08/Android之Window与WindowManager/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="Android之Window与WindowManager">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>

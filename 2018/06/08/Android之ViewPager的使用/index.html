@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android之ViewPager的使用 | aaaZzp&#39;s Blog</title>
+
+  <!-- keywords -->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​    ViewPager类需要一个适配器为其提供数据，一般与Fragment合用，需要用到FragmentPagerAdapter和FragmentStatePagerAdapter。 适配器​    通过继承PagerAdapter，实现自己的适配器，如下: 12345678910111213141516171819202122232425262728293031323334public c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之ViewPager的使用">
+<meta property="og:url" content="http://yoursite.com/2018/06/08/Android之ViewPager的使用/index.html">
+<meta property="og:site_name" content="aaaZzp&#39;s Blog">
+<meta property="og:description" content="​    ViewPager类需要一个适配器为其提供数据，一般与Fragment合用，需要用到FragmentPagerAdapter和FragmentStatePagerAdapter。 适配器​    通过继承PagerAdapter，实现自己的适配器，如下: 12345678910111213141516171819202122232425262728293031323334public c">
+<meta property="og:updated_time" content="2018-06-08T15:23:23.206Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之ViewPager的使用">
+<meta name="twitter:description" content="​    ViewPager类需要一个适配器为其提供数据，一般与Fragment合用，需要用到FragmentPagerAdapter和FragmentStatePagerAdapter。 适配器​    通过继承PagerAdapter，实现自己的适配器，如下: 12345678910111213141516171819202122232425262728293031323334public c">
+  
+    <link rel="alternative" href="/atom.xml" title="aaaZzp&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523511642537&di=b8b4c9f4963900a0d1e3ba5f61b27dcd&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+
+  <script src="//cdn.bootcss.com/require.js/2.3.2/require.min.js"></script>
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="particles-js"></div>
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">起白</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">学习学习学习努力努力努力</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/smackgg/hexo-theme-smackdown">smackdown</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">起白</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">起白</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">学习学习学习努力努力努力</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-Android之ViewPager的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/06/08/Android之ViewPager的使用/" class="article-date">
+  	<time datetime="2018-06-08T13:53:01.047Z" itemprop="datePublished">2018-06-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android之ViewPager的使用
+      
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    ViewPager类需要一个适配器为其提供数据，一般与Fragment合用，需要用到FragmentPagerAdapter和FragmentStatePagerAdapter。</p>
+<h4 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h4><p>​    通过继承PagerAdapter，实现自己的适配器，如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPagerAdapter</span> <span class="title">extend</span> <span class="title">PagerAdapter</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> List&lt;View&gt; mList;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyPagerAdapter</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//重写以下方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//返回页面个数</span></span><br><span class="line">        <span class="keyword">return</span> mList.size();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isViewFromObject</span><span class="params">(View view,Object object)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> view == object;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line">        contaner.add(mList.get(position));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(ViewGroup container,<span class="keyword">int</span> position,Object object)</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">        container.removeView((View) object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//若界面是fragment，即继承自FragmentPagerAdapter，重写方法即可，与PagerAdapter类似。</span></span><br></pre></td></tr></table></figure>
+<p>​    </p>
+<p>​    在ViewPager中，可以用notifyDataSetChanged()方法对数据进行更新。在PagerAdapter的刷新过程中，每次都会调用notifyDataSetChanged()时，都会调用getItemPostion(Object object)方法，该方法会遍历所有的Item，并且为每一个Item返回一个状态值（POSITION_NONE/POSITION_UNCHANGED），如果返回值为第一个，那么Item会被destroyItem方法移除，然后重新加载，如果是第二个，则不会重新加载，默认情况下应该返回第二个。</p>
+<p>​    若需要在ViewPager中更新数据，则需要重写getItemPosition(Object object)方法。</p>
+<h4 id="实现更新的方法"><a href="#实现更新的方法" class="headerlink" title="实现更新的方法"></a>实现更新的方法</h4><ol>
+<li>直接将<code>getItemPosition(Object object)</code> 的返回值设置为默认的POSITION_UNCHANGE 更改为POSITION_NONE。（这样就会遍历所有的Item，并且destory 所有的item，并且更新全部）。</li>
+<li>在PagerAdapter 定义int 型全局变量（意味着需要更新的Item Positon），然后在Adapter中新增函数<code>refresh()</code>，<code>在refresh()</code>函数中首先更新定义的int型全局变量，指明需要更新的item，然后在<code>getItemPosition(Ojbect object)</code> 获取遍历到object Position与需要更新的Item 位置进行比较（利用函数getItemPositon(object)），如果相同的话，返回POSITAION_NONE，这样就可以实现对特定位置的Item进行更新。</li>
+</ol>
+<h4 id="指示器"><a href="#指示器" class="headerlink" title="指示器"></a>指示器</h4><p>​    可以使用TabLayout，为ViewPager加入指示器，然后调用tabLayout的setupWithViewPager(viewPager)方法设置即可。</p>
+<h4 id="实现轮播图"><a href="#实现轮播图" class="headerlink" title="实现轮播图"></a>实现轮播图</h4><p>​    可利用Timer和TimerTask实现定时更新ViewPager的页面。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/11/Android线程与线程池/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">&lt;</strong>
+      <div class="article-nav-title">
+        
+          Android线程与线程池
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/08/Java知识点（二）：初始化与清理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java知识点（二）：初始化与清理</div>
+      <strong class="article-nav-caption">&gt;</strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="ds-share share" data-thread-key="Android之ViewPager的使用" data-title="Android之ViewPager的使用" data-url="http://yoursite.com/2018/06/08/Android之ViewPager的使用/"  data-images="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1523511642537&amp;di=b8b4c9f4963900a0d1e3ba5f61b27dcd&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F011f7e554b47b8000001bf7216351e.jpg%401280w_1l_2o_100sh.png" data-content="Android之ViewPager的使用">
+    <div class="ds-share-inline">
+      <ul  class="ds-share-icons-16">
+      	<li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+        <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+        <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+        <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+        <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+      </ul>
+      <div class="ds-share-icons-more">
+      </div>
+    </div>
+ </div>
+ 
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+      <div class="footer-left">
+        &copy; 2018 起白
+      </div>
+        <div class="footer-right">
+          <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/smackgg/hexo-theme-smackdown" target="_blank">Smackdown</a>
+        </div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="/js/main.js"></script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js"></script>
+
+
+  </div>
+</body>
+</html>
